@@ -1,0 +1,657 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN"
+                            "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    <folder name="Menu">
+        <folder name="Window">
+            <file name="systems-tech247-attendance-AbsentDaysComponent.shadow">
+                <!--systems.tech247.attendance.AbsentDaysTopComponent-->
+                <attr name="originalFile" stringvalue="Actions/Window/systems-tech247-attendance-AbsentDaysComponent.instance"/>
+            </file>
+            <file name="systems-tech247-attendance-AttEmployeeListTopComponent.shadow">
+                <!--systems.tech247.attendance.AttEmployeeListTopComponent-->
+                <attr name="originalFile" stringvalue="Actions/Window/systems-tech247-attendance-AttEmployeeListTopComponent.instance"/>
+            </file>
+            <file name="systems-tech247-attendance-ShiftScheduleTopComponent.shadow">
+                <!--systems.tech247.attendance.AttendanceRegisterTopComponent-->
+                <attr name="originalFile" stringvalue="Actions/Window/systems-tech247-attendance-ShiftScheduleTopComponent.instance"/>
+            </file>
+            <file name="systems-tech247-attendance-ClockinTopComponent.shadow">
+                <!--systems.tech247.attendance.ClockinTopComponent-->
+                <attr name="originalFile" stringvalue="Actions/Window/systems-tech247-attendance-ClockinTopComponent.instance"/>
+            </file>
+            <file name="systems-tech247-attendance-CompDaysComponent.shadow">
+                <!--systems.tech247.attendance.CompDaysTopComponent-->
+                <attr name="originalFile" stringvalue="Actions/Window/systems-tech247-attendance-CompDaysComponent.instance"/>
+            </file>
+            <file name="systems-tech247-attendance-OutOfStationEditorTopComponent.shadow">
+                <!--systems.tech247.attendance.OutOfStationEditorTopComponent-->
+                <attr name="originalFile" stringvalue="Actions/Window/systems-tech247-attendance-OutOfStationEditorTopComponent.instance"/>
+            </file>
+            <file name="systems-tech247-attendance-TADashBoardTopComponent.shadow">
+                <!--systems.tech247.attendance.TADashBoardTopComponent-->
+                <attr name="originalFile" stringvalue="Actions/Window/systems-tech247-attendance-TADashBoardTopComponent.instance"/>
+            </file>
+            <file name="systems-tech247-clockinutil-AttendanceTopComponent.shadow">
+                <!--systems.tech247.clockinutil.AttendanceTopComponent-->
+                <attr name="originalFile" stringvalue="Actions/Window/systems-tech247-clockinutil-AttendanceTopComponent.instance"/>
+            </file>
+            <file name="systems-tech247-clockinutil-DepartmentAttendanceTopComponent.shadow">
+                <!--systems.tech247.clockinutil.DepartmentAttendanceTopComponent-->
+                <attr name="originalFile" stringvalue="Actions/Window/systems-tech247-clockinutil-DepartmentAttendanceTopComponent.instance"/>
+            </file>
+            <file name="systems-tech247-endeavorclockin-TAClockinTopComponent.shadow">
+                <!--systems.tech247.clockinutil.TAClockinTopComponent-->
+                <attr name="originalFile" stringvalue="Actions/Window/systems-tech247-endeavorclockin-TAClockinTopComponent.instance"/>
+            </file>
+            <file name="systems-tech247-clockinutil-TASetupTopComponent.shadow">
+                <!--systems.tech247.clockinutil.TASetupTopComponent-->
+                <attr name="originalFile" stringvalue="Actions/Window/systems-tech247-clockinutil-TASetupTopComponent.instance"/>
+            </file>
+            <file name="systems-tech247-shiftschedule-ShiftScheduleTopComponent.shadow">
+                <!--systems.tech247.shiftschedule.ShiftScheduleTopComponent-->
+                <attr name="originalFile" stringvalue="Actions/Window/systems-tech247-shiftschedule-ShiftScheduleTopComponent.instance"/>
+            </file>
+            <file name="systems-tech247-tareports-TAReportsTopComponent.shadow">
+                <!--systems.tech247.tareports.TAReportsTopComponent-->
+                <attr name="originalFile" stringvalue="Actions/Window/systems-tech247-tareports-TAReportsTopComponent.instance"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="OptionsDialog">
+        <file name="systems-tech247-clockinutil-ClockinMachinesOptionsPanelController.instance">
+            <!--systems.tech247.clockinutil.ClockinMachinesOptionsPanelController-->
+            <attr
+                methodvalue="org.netbeans.spi.options.OptionsCategory.createCategory" name="instanceCreate"/>
+            <attr name="controller" newvalue="systems.tech247.clockinutil.ClockinMachinesOptionsPanelController"/>
+            <attr
+                bundlevalue="systems.tech247.clockinutil.Bundle#OptionsCategory_Name_ClockinMachines" name="categoryName"/>
+            <attr name="iconBase" stringvalue="systems/tech247/clockinutil/clock32.png"/>
+            <attr
+                bundlevalue="systems.tech247.clockinutil.Bundle#OptionsCategory_Keywords_ClockinMachines" name="keywords"/>
+            <attr name="keywordsCategory" stringvalue="ClockinMachines"/>
+        </file>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="AbsentDaysTopComponent.settings">
+                <!--systems.tech247.attendance.AbsentDaysTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE settings PUBLIC "-//NetBeans//DTD Session settings 1.0//EN" "http://www.netbeans.org/dtds/sessionsettings-1_0.dtd">
+<settings version="1.0">
+  <instance class="systems.tech247.attendance.AbsentDaysTopComponent"/>
+</settings>
+]]></file>
+            <file name="ShiftSTopComponent.settings">
+                <!--systems.tech247.attendance.AttendanceRegisterTopComponent-->
+                <!--systems.tech247.attendance.ClockinTopComponent-->
+                <!--systems.tech247.shiftschedule.ShiftScheduleTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE settings PUBLIC "-//NetBeans//DTD Session settings 1.0//EN" "http://www.netbeans.org/dtds/sessionsettings-1_0.dtd">
+<settings version="1.0">
+  <instance class="systems.tech247.shiftschedule.ShiftScheduleTopComponent"/>
+</settings>
+]]></file>
+            <file name="CompDaysTopComponent.settings">
+                <!--systems.tech247.attendance.CompDaysTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE settings PUBLIC "-//NetBeans//DTD Session settings 1.0//EN" "http://www.netbeans.org/dtds/sessionsettings-1_0.dtd">
+<settings version="1.0">
+  <instance class="systems.tech247.attendance.CompDaysTopComponent"/>
+</settings>
+]]></file>
+            <file name="OutOfStationEditorTopComponent.settings">
+                <!--systems.tech247.attendance.OutOfStationEditorTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE settings PUBLIC "-//NetBeans//DTD Session settings 1.0//EN" "http://www.netbeans.org/dtds/sessionsettings-1_0.dtd">
+<settings version="1.0">
+  <instance class="systems.tech247.attendance.OutOfStationEditorTopComponent"/>
+</settings>
+]]></file>
+            <file name="TADashBoardTopComponent.settings">
+                <!--systems.tech247.attendance.TADashBoardTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE settings PUBLIC "-//NetBeans//DTD Session settings 1.0//EN" "http://www.netbeans.org/dtds/sessionsettings-1_0.dtd">
+<settings version="1.0">
+  <instance class="systems.tech247.attendance.TADashBoardTopComponent"/>
+</settings>
+]]></file>
+            <file name="TAClockinTopComponent.settings">
+                <!--systems.tech247.clockinutil.TAClockinTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE settings PUBLIC "-//NetBeans//DTD Session settings 1.0//EN" "http://www.netbeans.org/dtds/sessionsettings-1_0.dtd">
+<settings version="1.0">
+  <instance class="systems.tech247.clockinutil.TAClockinTopComponent"/>
+</settings>
+]]></file>
+            <file name="TASetupTopComponent.settings">
+                <!--systems.tech247.clockinutil.TASetupTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE settings PUBLIC "-//NetBeans//DTD Session settings 1.0//EN" "http://www.netbeans.org/dtds/sessionsettings-1_0.dtd">
+<settings version="1.0">
+  <instance class="systems.tech247.clockinutil.TASetupTopComponent"/>
+</settings>
+]]></file>
+            <file name="TAReportsTopComponent.settings">
+                <!--systems.tech247.tareports.TAReportsTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE settings PUBLIC "-//NetBeans//DTD Session settings 1.0//EN" "http://www.netbeans.org/dtds/sessionsettings-1_0.dtd">
+<settings version="1.0">
+  <instance class="systems.tech247.tareports.TAReportsTopComponent"/>
+</settings>
+]]></file>
+        </folder>
+        <folder name="Modes">
+            <folder name="editor">
+                <file name="AbsentDaysTopComponent.wstcref">
+                    <!--systems.tech247.attendance.AbsentDaysTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tc-ref PUBLIC "-//NetBeans//DTD Top Component in Mode Properties 2.0//EN" "http://www.netbeans.org/dtds/tc-ref2_0.dtd">
+<tc-ref version="2.0">
+  <tc-id id="AbsentDaysTopComponent"/>
+  <state opened="false"/>
+</tc-ref>
+]]></file>
+                <file name="ShiftSTopComponent.wstcref">
+                    <!--systems.tech247.attendance.AttendanceRegisterTopComponent-->
+                    <!--systems.tech247.attendance.ClockinTopComponent-->
+                    <!--systems.tech247.shiftschedule.ShiftScheduleTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tc-ref PUBLIC "-//NetBeans//DTD Top Component in Mode Properties 2.0//EN" "http://www.netbeans.org/dtds/tc-ref2_0.dtd">
+<tc-ref version="2.0">
+  <tc-id id="ShiftSTopComponent"/>
+  <state opened="false"/>
+</tc-ref>
+]]></file>
+                <file name="CompDaysTopComponent.wstcref">
+                    <!--systems.tech247.attendance.CompDaysTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tc-ref PUBLIC "-//NetBeans//DTD Top Component in Mode Properties 2.0//EN" "http://www.netbeans.org/dtds/tc-ref2_0.dtd">
+<tc-ref version="2.0">
+  <tc-id id="CompDaysTopComponent"/>
+  <state opened="false"/>
+</tc-ref>
+]]></file>
+                <file name="OutOfStationEditorTopComponent.wstcref">
+                    <!--systems.tech247.attendance.OutOfStationEditorTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tc-ref PUBLIC "-//NetBeans//DTD Top Component in Mode Properties 2.0//EN" "http://www.netbeans.org/dtds/tc-ref2_0.dtd">
+<tc-ref version="2.0">
+  <tc-id id="OutOfStationEditorTopComponent"/>
+  <state opened="false"/>
+</tc-ref>
+]]></file>
+            </folder>
+            <folder name="leftSlidingSide">
+                <file name="TADashBoardTopComponent.wstcref">
+                    <!--systems.tech247.attendance.TADashBoardTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tc-ref PUBLIC "-//NetBeans//DTD Top Component in Mode Properties 2.0//EN" "http://www.netbeans.org/dtds/tc-ref2_0.dtd">
+<tc-ref version="2.0">
+  <tc-id id="TADashBoardTopComponent"/>
+  <state opened="false"/>
+</tc-ref>
+]]></file>
+            </folder>
+            <folder name="explorer">
+                <file name="TAClockinTopComponent.wstcref">
+                    <!--systems.tech247.clockinutil.TAClockinTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tc-ref PUBLIC "-//NetBeans//DTD Top Component in Mode Properties 2.0//EN" "http://www.netbeans.org/dtds/tc-ref2_0.dtd">
+<tc-ref version="2.0">
+  <tc-id id="TAClockinTopComponent"/>
+  <state opened="false"/>
+</tc-ref>
+]]></file>
+                <file name="TASetupTopComponent.wstcref">
+                    <!--systems.tech247.clockinutil.TASetupTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tc-ref PUBLIC "-//NetBeans//DTD Top Component in Mode Properties 2.0//EN" "http://www.netbeans.org/dtds/tc-ref2_0.dtd">
+<tc-ref version="2.0">
+  <tc-id id="TASetupTopComponent"/>
+  <state opened="false"/>
+</tc-ref>
+]]></file>
+                <file name="TAReportsTopComponent.wstcref">
+                    <!--systems.tech247.tareports.TAReportsTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tc-ref PUBLIC "-//NetBeans//DTD Top Component in Mode Properties 2.0//EN" "http://www.netbeans.org/dtds/tc-ref2_0.dtd">
+<tc-ref version="2.0">
+  <tc-id id="TAReportsTopComponent"/>
+  <state opened="false"/>
+</tc-ref>
+]]></file>
+            </folder>
+        </folder>
+        <folder name="Roles">
+            <folder name="ta">
+                <folder name="Components">
+                    <file name="AttEmployeeListTopComponent.settings">
+                        <!--systems.tech247.attendance.AttEmployeeListTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE settings PUBLIC "-//NetBeans//DTD Session settings 1.0//EN" "http://www.netbeans.org/dtds/sessionsettings-1_0.dtd">
+<settings version="1.0">
+  <instance class="systems.tech247.attendance.AttEmployeeListTopComponent"/>
+</settings>
+]]></file>
+                    <file name="AttendanceTopComponent.settings">
+                        <!--systems.tech247.clockinutil.AttendanceTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE settings PUBLIC "-//NetBeans//DTD Session settings 1.0//EN" "http://www.netbeans.org/dtds/sessionsettings-1_0.dtd">
+<settings version="1.0">
+  <instance class="systems.tech247.clockinutil.AttendanceTopComponent"/>
+</settings>
+]]></file>
+                    <file name="DepartmentAttendanceTopComponent.settings">
+                        <!--systems.tech247.clockinutil.DepartmentAttendanceTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE settings PUBLIC "-//NetBeans//DTD Session settings 1.0//EN" "http://www.netbeans.org/dtds/sessionsettings-1_0.dtd">
+<settings version="1.0">
+  <instance class="systems.tech247.clockinutil.DepartmentAttendanceTopComponent"/>
+</settings>
+]]></file>
+                </folder>
+                <folder name="Modes">
+                    <folder name="explorer">
+                        <file name="AttEmployeeListTopComponent.wstcref">
+                            <!--systems.tech247.attendance.AttEmployeeListTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tc-ref PUBLIC "-//NetBeans//DTD Top Component in Mode Properties 2.0//EN" "http://www.netbeans.org/dtds/tc-ref2_0.dtd">
+<tc-ref version="2.0">
+  <tc-id id="AttEmployeeListTopComponent"/>
+  <state opened="true"/>
+</tc-ref>
+]]></file>
+                        <file name="AttendanceTopComponent.wstcref">
+                            <!--systems.tech247.clockinutil.AttendanceTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tc-ref PUBLIC "-//NetBeans//DTD Top Component in Mode Properties 2.0//EN" "http://www.netbeans.org/dtds/tc-ref2_0.dtd">
+<tc-ref version="2.0">
+  <tc-id id="AttendanceTopComponent"/>
+  <state opened="true"/>
+</tc-ref>
+]]></file>
+                    </folder>
+                    <folder name="editor">
+                        <file name="DepartmentAttendanceTopComponent.wstcref">
+                            <!--systems.tech247.clockinutil.DepartmentAttendanceTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tc-ref PUBLIC "-//NetBeans//DTD Top Component in Mode Properties 2.0//EN" "http://www.netbeans.org/dtds/tc-ref2_0.dtd">
+<tc-ref version="2.0">
+  <tc-id id="DepartmentAttendanceTopComponent"/>
+  <state opened="true"/>
+</tc-ref>
+]]></file>
+                    </folder>
+                </folder>
+            </folder>
+        </folder>
+    </folder>
+    <folder name="Actions">
+        <folder name="Window">
+            <file name="systems-tech247-attendance-AbsentDaysComponent.instance">
+                <!--systems.tech247.attendance.AbsentDaysTopComponent-->
+                <attr
+                    methodvalue="org.openide.windows.TopComponent.openAction" name="instanceCreate"/>
+                <attr name="component" newvalue="systems.tech247.attendance.AbsentDaysTopComponent"/>
+                <attr name="preferredID" stringvalue="AbsentDaysTopComponent"/>
+                <attr
+                    bundlevalue="systems.tech247.attendance.Bundle#CTL_AbsentDaysAction" name="displayName"/>
+            </file>
+            <file name="systems-tech247-attendance-AttEmployeeListTopComponent.instance">
+                <!--systems.tech247.attendance.AttEmployeeListTopComponent-->
+                <attr
+                    methodvalue="org.openide.windows.TopComponent.openAction" name="instanceCreate"/>
+                <attr name="component" newvalue="systems.tech247.attendance.AttEmployeeListTopComponent"/>
+                <attr name="preferredID" stringvalue="AttEmployeeListTopComponent"/>
+                <attr
+                    bundlevalue="systems.tech247.attendance.Bundle#CTL_AttEmployeeListAction" name="displayName"/>
+            </file>
+            <file name="systems-tech247-attendance-ShiftScheduleTopComponent.instance">
+                <!--systems.tech247.attendance.AttendanceRegisterTopComponent-->
+                <attr
+                    methodvalue="org.openide.windows.TopComponent.openAction" name="instanceCreate"/>
+                <attr name="component" newvalue="systems.tech247.attendance.AttendanceRegisterTopComponent"/>
+                <attr name="preferredID" stringvalue="AttendanceTopComponent"/>
+                <attr
+                    bundlevalue="systems.tech247.attendance.Bundle#CTL_AttendanceAction" name="displayName"/>
+            </file>
+            <file name="systems-tech247-attendance-ClockinTopComponent.instance">
+                <!--systems.tech247.attendance.ClockinTopComponent-->
+                <attr
+                    methodvalue="org.openide.windows.TopComponent.openAction" name="instanceCreate"/>
+                <attr name="component" newvalue="systems.tech247.attendance.ClockinTopComponent"/>
+                <attr name="preferredID" stringvalue="ClockinTopComponent"/>
+                <attr
+                    bundlevalue="systems.tech247.attendance.Bundle#CTL_ClockinAction" name="displayName"/>
+            </file>
+            <file name="systems-tech247-attendance-CompDaysComponent.instance">
+                <!--systems.tech247.attendance.CompDaysTopComponent-->
+                <attr
+                    methodvalue="org.openide.windows.TopComponent.openAction" name="instanceCreate"/>
+                <attr name="component" newvalue="systems.tech247.attendance.CompDaysTopComponent"/>
+                <attr name="preferredID" stringvalue="CompDaysTopComponent"/>
+                <attr
+                    bundlevalue="systems.tech247.attendance.Bundle#CTL_CompDaysAction" name="displayName"/>
+            </file>
+            <file name="systems-tech247-attendance-OutOfStationEditorTopComponent.instance">
+                <!--systems.tech247.attendance.OutOfStationEditorTopComponent-->
+                <attr
+                    methodvalue="org.openide.windows.TopComponent.openAction" name="instanceCreate"/>
+                <attr name="component" newvalue="systems.tech247.attendance.OutOfStationEditorTopComponent"/>
+                <attr name="preferredID" stringvalue="OutOfStationEditorTopComponent"/>
+                <attr
+                    bundlevalue="systems.tech247.attendance.Bundle#CTL_OutOfStationEditorAction" name="displayName"/>
+            </file>
+            <file name="systems-tech247-attendance-TADashBoardTopComponent.instance">
+                <!--systems.tech247.attendance.TADashBoardTopComponent-->
+                <attr
+                    methodvalue="org.openide.windows.TopComponent.openAction" name="instanceCreate"/>
+                <attr name="component" newvalue="systems.tech247.attendance.TADashBoardTopComponent"/>
+                <attr name="preferredID" stringvalue="TADashBoardTopComponent"/>
+                <attr
+                    bundlevalue="systems.tech247.attendance.Bundle#CTL_TADashBoardAction" name="displayName"/>
+            </file>
+            <file name="systems-tech247-clockinutil-AttendanceTopComponent.instance">
+                <!--systems.tech247.clockinutil.AttendanceTopComponent-->
+                <attr
+                    methodvalue="org.openide.windows.TopComponent.openAction" name="instanceCreate"/>
+                <attr name="component" newvalue="systems.tech247.clockinutil.AttendanceTopComponent"/>
+                <attr name="preferredID" stringvalue="AttendanceTopComponent"/>
+                <attr
+                    bundlevalue="systems.tech247.clockinutil.Bundle#CTL_AttendanceAction" name="displayName"/>
+            </file>
+            <file name="systems-tech247-clockinutil-DepartmentAttendanceTopComponent.instance">
+                <!--systems.tech247.clockinutil.DepartmentAttendanceTopComponent-->
+                <attr
+                    methodvalue="org.openide.windows.TopComponent.openAction" name="instanceCreate"/>
+                <attr name="component" newvalue="systems.tech247.clockinutil.DepartmentAttendanceTopComponent"/>
+                <attr name="preferredID" stringvalue="DepartmentAttendanceTopComponent"/>
+                <attr
+                    bundlevalue="systems.tech247.clockinutil.Bundle#CTL_DepartmentAttendanceAction" name="displayName"/>
+            </file>
+            <file name="systems-tech247-endeavorclockin-TAClockinTopComponent.instance">
+                <!--systems.tech247.clockinutil.TAClockinTopComponent-->
+                <attr
+                    methodvalue="org.openide.windows.TopComponent.openAction" name="instanceCreate"/>
+                <attr name="component" newvalue="systems.tech247.clockinutil.TAClockinTopComponent"/>
+                <attr name="preferredID" stringvalue="TAClockinTopComponent"/>
+                <attr
+                    bundlevalue="systems.tech247.clockinutil.Bundle#CTL_TAClockinAction" name="displayName"/>
+            </file>
+            <file name="systems-tech247-clockinutil-TASetupTopComponent.instance">
+                <!--systems.tech247.clockinutil.TASetupTopComponent-->
+                <attr
+                    methodvalue="org.openide.windows.TopComponent.openAction" name="instanceCreate"/>
+                <attr name="component" newvalue="systems.tech247.clockinutil.TASetupTopComponent"/>
+                <attr name="preferredID" stringvalue="TASetupTopComponent"/>
+                <attr
+                    bundlevalue="systems.tech247.clockinutil.Bundle#CTL_TASetupAction" name="displayName"/>
+            </file>
+            <file name="systems-tech247-shiftschedule-ShiftScheduleTopComponent.instance">
+                <!--systems.tech247.shiftschedule.ShiftScheduleTopComponent-->
+                <attr
+                    methodvalue="org.openide.windows.TopComponent.openAction" name="instanceCreate"/>
+                <attr name="component" newvalue="systems.tech247.shiftschedule.ShiftScheduleTopComponent"/>
+                <attr name="preferredID" stringvalue="ShiftScheduleTopComponent"/>
+                <attr
+                    bundlevalue="systems.tech247.shiftschedule.Bundle#CTL_ShiftScheduleAction" name="displayName"/>
+            </file>
+            <file name="systems-tech247-tareports-TAReportsTopComponent.instance">
+                <!--systems.tech247.tareports.TAReportsTopComponent-->
+                <attr
+                    methodvalue="org.openide.windows.TopComponent.openAction" name="instanceCreate"/>
+                <attr name="component" newvalue="systems.tech247.tareports.TAReportsTopComponent"/>
+                <attr name="preferredID" stringvalue="TAReportsTopComponent"/>
+                <attr
+                    bundlevalue="systems.tech247.tareports.Bundle#CTL_TAReportsAction" name="displayName"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="xml">
+        <folder name="entities">
+            <folder name="systems_tech247_attendance">
+                <file name="AbsentDays" url="nbres:/org/netbeans/modules/settings/resources/properties-1_0.dtd">
+                    <!--systems.tech247.attendance.AbsentDaysTopComponent-->
+                    <attr name="hint.originalPublicID" stringvalue="-//systems.tech247.attendance//AbsentDays//EN"/>
+                </file>
+                <file name="AttEmployeeList" url="nbres:/org/netbeans/modules/settings/resources/properties-1_0.dtd">
+                    <!--systems.tech247.attendance.AttEmployeeListTopComponent-->
+                    <attr name="hint.originalPublicID" stringvalue="-//systems.tech247.attendance//AttEmployeeList//EN"/>
+                </file>
+                <file name="CompDays" url="nbres:/org/netbeans/modules/settings/resources/properties-1_0.dtd">
+                    <!--systems.tech247.attendance.CompDaysTopComponent-->
+                    <attr name="hint.originalPublicID" stringvalue="-//systems.tech247.attendance//CompDays//EN"/>
+                </file>
+                <file name="OutOfStationEditor" url="nbres:/org/netbeans/modules/settings/resources/properties-1_0.dtd">
+                    <!--systems.tech247.attendance.OutOfStationEditorTopComponent-->
+                    <attr name="hint.originalPublicID" stringvalue="-//systems.tech247.attendance//OutOfStationEditor//EN"/>
+                </file>
+                <file name="TADashBoard" url="nbres:/org/netbeans/modules/settings/resources/properties-1_0.dtd">
+                    <!--systems.tech247.attendance.TADashBoardTopComponent-->
+                    <attr name="hint.originalPublicID" stringvalue="-//systems.tech247.attendance//TADashBoard//EN"/>
+                </file>
+            </folder>
+            <folder name="systems_tech247_shiftschedule">
+                <file name="ShiftSchedule" url="nbres:/org/netbeans/modules/settings/resources/properties-1_0.dtd">
+                    <!--systems.tech247.attendance.AttendanceRegisterTopComponent-->
+                    <!--systems.tech247.attendance.ClockinTopComponent-->
+                    <!--systems.tech247.shiftschedule.ShiftScheduleTopComponent-->
+                    <attr name="hint.originalPublicID" stringvalue="-//systems.tech247.shiftschedule//ShiftSchedule//EN"/>
+                </file>
+            </folder>
+            <folder name="systems_tech247_clockinutil">
+                <file name="Attendance" url="nbres:/org/netbeans/modules/settings/resources/properties-1_0.dtd">
+                    <!--systems.tech247.clockinutil.AttendanceTopComponent-->
+                    <attr name="hint.originalPublicID" stringvalue="-//systems.tech247.clockinutil//Attendance//EN"/>
+                </file>
+                <file name="DepartmentAttendance" url="nbres:/org/netbeans/modules/settings/resources/properties-1_0.dtd">
+                    <!--systems.tech247.clockinutil.DepartmentAttendanceTopComponent-->
+                    <attr name="hint.originalPublicID" stringvalue="-//systems.tech247.clockinutil//DepartmentAttendance//EN"/>
+                </file>
+                <file name="ShiftEditor" url="nbres:/org/netbeans/modules/settings/resources/properties-1_0.dtd">
+                    <!--systems.tech247.clockinutil.ShiftEditorTopComponent-->
+                    <attr name="hint.originalPublicID" stringvalue="-//systems.tech247.clockinutil//ShiftEditor//EN"/>
+                </file>
+                <file name="TASetup" url="nbres:/org/netbeans/modules/settings/resources/properties-1_0.dtd">
+                    <!--systems.tech247.clockinutil.TASetupTopComponent-->
+                    <attr name="hint.originalPublicID" stringvalue="-//systems.tech247.clockinutil//TASetup//EN"/>
+                </file>
+            </folder>
+            <folder name="systems_tech247_endeavorclockin">
+                <file name="TAClockin" url="nbres:/org/netbeans/modules/settings/resources/properties-1_0.dtd">
+                    <!--systems.tech247.clockinutil.TAClockinTopComponent-->
+                    <attr name="hint.originalPublicID" stringvalue="-//systems.tech247.endeavorclockin//TAClockin//EN"/>
+                </file>
+            </folder>
+            <folder name="systems_tech247_tareports">
+                <file name="TAReports" url="nbres:/org/netbeans/modules/settings/resources/properties-1_0.dtd">
+                    <!--systems.tech247.tareports.TAReportsTopComponent-->
+                    <attr name="hint.originalPublicID" stringvalue="-//systems.tech247.tareports//TAReports//EN"/>
+                </file>
+            </folder>
+        </folder>
+        <folder name="memory">
+            <folder name="systems">
+                <folder name="tech247">
+                    <folder name="attendance">
+                        <file name="AbsentDaysTopComponent">
+                            <!--systems.tech247.attendance.AbsentDaysTopComponent-->
+                            <attr name="settings.providerPath" stringvalue="xml/lookups//systems_tech247_attendance/AbsentDays.instance"/>
+                        </file>
+                        <file name="AttEmployeeListTopComponent">
+                            <!--systems.tech247.attendance.AttEmployeeListTopComponent-->
+                            <attr name="settings.providerPath" stringvalue="xml/lookups//systems_tech247_attendance/AttEmployeeList.instance"/>
+                        </file>
+                        <file name="AttendanceRegisterTopComponent">
+                            <!--systems.tech247.attendance.AttendanceRegisterTopComponent-->
+                            <attr name="settings.providerPath" stringvalue="xml/lookups//systems_tech247_shiftschedule/ShiftSchedule.instance"/>
+                        </file>
+                        <file name="ClockinTopComponent">
+                            <!--systems.tech247.attendance.ClockinTopComponent-->
+                            <attr name="settings.providerPath" stringvalue="xml/lookups//systems_tech247_shiftschedule/ShiftSchedule.instance"/>
+                        </file>
+                        <file name="CompDaysTopComponent">
+                            <!--systems.tech247.attendance.CompDaysTopComponent-->
+                            <attr name="settings.providerPath" stringvalue="xml/lookups//systems_tech247_attendance/CompDays.instance"/>
+                        </file>
+                        <file name="OutOfStationEditorTopComponent">
+                            <!--systems.tech247.attendance.OutOfStationEditorTopComponent-->
+                            <attr name="settings.providerPath" stringvalue="xml/lookups//systems_tech247_attendance/OutOfStationEditor.instance"/>
+                        </file>
+                        <file name="TADashBoardTopComponent">
+                            <!--systems.tech247.attendance.TADashBoardTopComponent-->
+                            <attr name="settings.providerPath" stringvalue="xml/lookups//systems_tech247_attendance/TADashBoard.instance"/>
+                        </file>
+                    </folder>
+                    <folder name="clockinutil">
+                        <file name="AttendanceTopComponent">
+                            <!--systems.tech247.clockinutil.AttendanceTopComponent-->
+                            <attr name="settings.providerPath" stringvalue="xml/lookups//systems_tech247_clockinutil/Attendance.instance"/>
+                        </file>
+                        <file name="DepartmentAttendanceTopComponent">
+                            <!--systems.tech247.clockinutil.DepartmentAttendanceTopComponent-->
+                            <attr name="settings.providerPath" stringvalue="xml/lookups//systems_tech247_clockinutil/DepartmentAttendance.instance"/>
+                        </file>
+                        <file name="ShiftEditorTopComponent">
+                            <!--systems.tech247.clockinutil.ShiftEditorTopComponent-->
+                            <attr name="settings.providerPath" stringvalue="xml/lookups//systems_tech247_clockinutil/ShiftEditor.instance"/>
+                        </file>
+                        <file name="TAClockinTopComponent">
+                            <!--systems.tech247.clockinutil.TAClockinTopComponent-->
+                            <attr name="settings.providerPath" stringvalue="xml/lookups//systems_tech247_endeavorclockin/TAClockin.instance"/>
+                        </file>
+                        <file name="TASetupTopComponent">
+                            <!--systems.tech247.clockinutil.TASetupTopComponent-->
+                            <attr name="settings.providerPath" stringvalue="xml/lookups//systems_tech247_clockinutil/TASetup.instance"/>
+                        </file>
+                    </folder>
+                    <folder name="shiftschedule">
+                        <file name="ShiftScheduleTopComponent">
+                            <!--systems.tech247.shiftschedule.ShiftScheduleTopComponent-->
+                            <attr name="settings.providerPath" stringvalue="xml/lookups//systems_tech247_shiftschedule/ShiftSchedule.instance"/>
+                        </file>
+                    </folder>
+                    <folder name="tareports">
+                        <file name="TAReportsTopComponent">
+                            <!--systems.tech247.tareports.TAReportsTopComponent-->
+                            <attr name="settings.providerPath" stringvalue="xml/lookups//systems_tech247_tareports/TAReports.instance"/>
+                        </file>
+                    </folder>
+                </folder>
+            </folder>
+        </folder>
+        <folder name="lookups">
+            <folder name="systems_tech247_attendance">
+                <file name="AbsentDays.instance">
+                    <!--systems.tech247.attendance.AbsentDaysTopComponent-->
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.create" name="instanceCreate"/>
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.properties" name="settings.convertor"/>
+                    <attr name="settings.instanceClass" stringvalue="systems.tech247.attendance.AbsentDaysTopComponent"/>
+                    <attr name="settings.instanceOf" stringvalue="systems.tech247.attendance.AbsentDaysTopComponent"/>
+                    <attr boolvalue="true" name="xmlproperties.preventStoring"/>
+                </file>
+                <file name="AttEmployeeList.instance">
+                    <!--systems.tech247.attendance.AttEmployeeListTopComponent-->
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.create" name="instanceCreate"/>
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.properties" name="settings.convertor"/>
+                    <attr name="settings.instanceClass" stringvalue="systems.tech247.attendance.AttEmployeeListTopComponent"/>
+                    <attr name="settings.instanceOf" stringvalue="systems.tech247.attendance.AttEmployeeListTopComponent"/>
+                    <attr boolvalue="true" name="xmlproperties.preventStoring"/>
+                </file>
+                <file name="CompDays.instance">
+                    <!--systems.tech247.attendance.CompDaysTopComponent-->
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.create" name="instanceCreate"/>
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.properties" name="settings.convertor"/>
+                    <attr name="settings.instanceClass" stringvalue="systems.tech247.attendance.CompDaysTopComponent"/>
+                    <attr name="settings.instanceOf" stringvalue="systems.tech247.attendance.CompDaysTopComponent"/>
+                    <attr boolvalue="true" name="xmlproperties.preventStoring"/>
+                </file>
+                <file name="OutOfStationEditor.instance">
+                    <!--systems.tech247.attendance.OutOfStationEditorTopComponent-->
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.create" name="instanceCreate"/>
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.properties" name="settings.convertor"/>
+                    <attr name="settings.instanceClass" stringvalue="systems.tech247.attendance.OutOfStationEditorTopComponent"/>
+                    <attr name="settings.instanceOf" stringvalue="systems.tech247.attendance.OutOfStationEditorTopComponent"/>
+                    <attr boolvalue="true" name="xmlproperties.preventStoring"/>
+                </file>
+                <file name="TADashBoard.instance">
+                    <!--systems.tech247.attendance.TADashBoardTopComponent-->
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.create" name="instanceCreate"/>
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.properties" name="settings.convertor"/>
+                    <attr name="settings.instanceClass" stringvalue="systems.tech247.attendance.TADashBoardTopComponent"/>
+                    <attr name="settings.instanceOf" stringvalue="systems.tech247.attendance.TADashBoardTopComponent"/>
+                    <attr boolvalue="true" name="xmlproperties.preventStoring"/>
+                </file>
+            </folder>
+            <folder name="systems_tech247_shiftschedule">
+                <file name="ShiftSchedule.instance">
+                    <!--systems.tech247.attendance.AttendanceRegisterTopComponent-->
+                    <!--systems.tech247.attendance.ClockinTopComponent-->
+                    <!--systems.tech247.shiftschedule.ShiftScheduleTopComponent-->
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.create" name="instanceCreate"/>
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.properties" name="settings.convertor"/>
+                    <attr name="settings.instanceClass" stringvalue="systems.tech247.shiftschedule.ShiftScheduleTopComponent"/>
+                    <attr name="settings.instanceOf" stringvalue="systems.tech247.shiftschedule.ShiftScheduleTopComponent"/>
+                    <attr boolvalue="true" name="xmlproperties.preventStoring"/>
+                </file>
+            </folder>
+            <folder name="systems_tech247_clockinutil">
+                <file name="Attendance.instance">
+                    <!--systems.tech247.clockinutil.AttendanceTopComponent-->
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.create" name="instanceCreate"/>
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.properties" name="settings.convertor"/>
+                    <attr name="settings.instanceClass" stringvalue="systems.tech247.clockinutil.AttendanceTopComponent"/>
+                    <attr name="settings.instanceOf" stringvalue="systems.tech247.clockinutil.AttendanceTopComponent"/>
+                    <attr boolvalue="true" name="xmlproperties.preventStoring"/>
+                </file>
+                <file name="DepartmentAttendance.instance">
+                    <!--systems.tech247.clockinutil.DepartmentAttendanceTopComponent-->
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.create" name="instanceCreate"/>
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.properties" name="settings.convertor"/>
+                    <attr name="settings.instanceClass" stringvalue="systems.tech247.clockinutil.DepartmentAttendanceTopComponent"/>
+                    <attr name="settings.instanceOf" stringvalue="systems.tech247.clockinutil.DepartmentAttendanceTopComponent"/>
+                    <attr boolvalue="true" name="xmlproperties.preventStoring"/>
+                </file>
+                <file name="ShiftEditor.instance">
+                    <!--systems.tech247.clockinutil.ShiftEditorTopComponent-->
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.create" name="instanceCreate"/>
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.properties" name="settings.convertor"/>
+                    <attr name="settings.instanceClass" stringvalue="systems.tech247.clockinutil.ShiftEditorTopComponent"/>
+                    <attr name="settings.instanceOf" stringvalue="systems.tech247.clockinutil.ShiftEditorTopComponent"/>
+                    <attr boolvalue="true" name="xmlproperties.preventStoring"/>
+                </file>
+                <file name="TASetup.instance">
+                    <!--systems.tech247.clockinutil.TASetupTopComponent-->
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.create" name="instanceCreate"/>
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.properties" name="settings.convertor"/>
+                    <attr name="settings.instanceClass" stringvalue="systems.tech247.clockinutil.TASetupTopComponent"/>
+                    <attr name="settings.instanceOf" stringvalue="systems.tech247.clockinutil.TASetupTopComponent"/>
+                    <attr boolvalue="true" name="xmlproperties.preventStoring"/>
+                </file>
+            </folder>
+            <folder name="systems_tech247_endeavorclockin">
+                <file name="TAClockin.instance">
+                    <!--systems.tech247.clockinutil.TAClockinTopComponent-->
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.create" name="instanceCreate"/>
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.properties" name="settings.convertor"/>
+                    <attr name="settings.instanceClass" stringvalue="systems.tech247.clockinutil.TAClockinTopComponent"/>
+                    <attr name="settings.instanceOf" stringvalue="systems.tech247.clockinutil.TAClockinTopComponent"/>
+                    <attr boolvalue="true" name="xmlproperties.preventStoring"/>
+                </file>
+            </folder>
+            <folder name="systems_tech247_tareports">
+                <file name="TAReports.instance">
+                    <!--systems.tech247.tareports.TAReportsTopComponent-->
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.create" name="instanceCreate"/>
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.properties" name="settings.convertor"/>
+                    <attr name="settings.instanceClass" stringvalue="systems.tech247.tareports.TAReportsTopComponent"/>
+                    <attr name="settings.instanceOf" stringvalue="systems.tech247.tareports.TAReportsTopComponent"/>
+                    <attr boolvalue="true" name="xmlproperties.preventStoring"/>
+                </file>
+            </folder>
+        </folder>
+    </folder>
+</filesystem>
