@@ -29,9 +29,9 @@ import systems.tech247.util.QueryEmployee;
 @TopComponent.Description(
         preferredID = "AttEmployeeListTopComponent",
         //iconBase="SET/PATH/TO/ICON/HERE", 
-        persistenceType = TopComponent.PERSISTENCE_ALWAYS
+        persistenceType = TopComponent.PERSISTENCE_NEVER
 )
-@TopComponent.Registration(mode = "explorer", openAtStartup = true, roles = {"ta"})
+@TopComponent.Registration(mode = "explorer", openAtStartup = false/*, roles = {"ta"}*/)
 @ActionID(category = "Window", id = "systems.tech247.attendance.AttEmployeeListTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(

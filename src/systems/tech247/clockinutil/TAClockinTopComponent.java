@@ -19,8 +19,8 @@ import org.openide.explorer.view.OutlineView;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 import org.openide.util.NbPreferences;
-import systems.tech247.endeavorclockin.ZKOptions;
-import systems.tech247.endeavorclockin.ZKSoapLib;
+import systems.tech247.clockin.ZKOptions;
+import systems.tech247.clockin.ZKSoapLib;
 
 /**
  * Top component which displays something.

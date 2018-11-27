@@ -8,6 +8,7 @@ package systems.tech247.tareports;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.awt.StatusDisplayer;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 
@@ -32,7 +33,7 @@ import org.openide.util.NbBundle.Messages;
 )
 @Messages({
     "CTL_TAReportsAction=TAReports",
-    "CTL_TAReportsTopComponent=TAReports Window",
+    "CTL_TAReportsTopComponent=TA Reports",
     "HINT_TAReportsTopComponent=This is a TAReports window"
 })
 public final class TAReportsTopComponent extends TopComponent {
@@ -68,7 +69,7 @@ public final class TAReportsTopComponent extends TopComponent {
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
-        // TODO add custom code on component opening
+        StatusDisplayer.getDefault().setStatusText("TA Reports opened");
     }
 
     @Override

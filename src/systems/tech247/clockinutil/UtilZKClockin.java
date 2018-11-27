@@ -14,8 +14,8 @@ import org.openide.nodes.AbstractNode;
 import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Children;
 import org.openide.util.NbPreferences;
-import systems.tech247.endeavorclockin.ZKOptions;
-import systems.tech247.endeavorclockin.ZKSoapLib;
+import systems.tech247.clockin.ZKOptions;
+import systems.tech247.clockin.ZKSoapLib;
 import systems.tech247.hr.OrganizationUnits;
 
 /**

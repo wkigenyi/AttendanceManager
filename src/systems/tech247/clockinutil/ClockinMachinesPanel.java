@@ -8,7 +8,7 @@ package systems.tech247.clockinutil;
 import java.io.IOException;
 import java.net.Socket;
 import org.openide.util.NbPreferences;
-import systems.tech247.endeavorclockin.ZKUDPLib;
+import systems.tech247.clockin.ZKUDPLib;
 
 final class ClockinMachinesPanel extends javax.swing.JPanel {
 

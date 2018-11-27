@@ -19,7 +19,7 @@ import systems.tech247.util.CetusUTL;
  * Top component which displays something.
  */
 @ConvertAsProperties(
-        dtd = "-//systems.tech247.attendance//TADashBoard//EN",
+        dtd = "-//systems.tech247.ta//TADashBoard//EN",
         autostore = false
 )
 @TopComponent.Description(
@@ -28,7 +28,7 @@ import systems.tech247.util.CetusUTL;
         persistenceType = TopComponent.PERSISTENCE_NEVER
 )
 @TopComponent.Registration(mode = "leftSlidingSide", openAtStartup = false)
-@ActionID(category = "Window", id = "systems.tech247.attendance.TADashBoardTopComponent")
+@ActionID(category = "Window", id = "systems.tech247.ta.TADashBoardTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
         displayName = "#CTL_TADashBoardAction",
@@ -108,11 +108,11 @@ public final class TADashBoardTopComponent extends TopComponent {
 //        }
         
         if(group != null){
+            
             group.open();
-            StatusDisplayer.getDefault().setStatusText("Group Opened");
             CetusUTL.currentTCG = group;
         }else{
-            StatusDisplayer.getDefault().setStatusText("Groups is null");
+            StatusDisplayer.getDefault().setStatusText("TA Group is null");
         }
     }
 

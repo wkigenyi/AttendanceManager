@@ -10,7 +10,7 @@ class Bundle {
         return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_TAReportsAction");
     }
     /**
-     * @return <i>TAReports Window</i>
+     * @return <i>TA Reports</i>
      * @see TAReportsTopComponent
      */
     static String CTL_TAReportsTopComponent() {
