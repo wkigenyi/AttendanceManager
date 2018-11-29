@@ -24,7 +24,6 @@ public class FactoryTASetup extends ChildFactory<SetupItem> {
     @Override
     protected boolean createKeys(List<SetupItem> toPopulate) {
         toPopulate.add(new SetupItem("Shifts",Children.create(new FactoryShifts("SELECT s FROM PtmShifts s", true), true)));
-        toPopulate.add(new SetupItem("Reports", Children.create(new FactoryTAReports(), true), "systems/tech247/util/icons/capex.png"));
         toPopulate.add(new SetupItem("Overtime Authorization", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -5,12 +5,18 @@
  */
 package systems.tech247.tareports;
 
+import java.awt.BorderLayout;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.StatusDisplayer;
+import org.openide.explorer.ExplorerManager;
+import org.openide.explorer.view.BeanTreeView;
+import org.openide.nodes.AbstractNode;
+import org.openide.nodes.Children;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import systems.tech247.clockinutil.FactoryTAReports;
 
 /**
  * Top component which displays something.
@@ -36,12 +42,16 @@ import org.openide.util.NbBundle.Messages;
     "CTL_TAReportsTopComponent=TA Reports",
     "HINT_TAReportsTopComponent=This is a TAReports window"
 })
-public final class TAReportsTopComponent extends TopComponent {
-
+public final class TAReportsTopComponent extends TopComponent implements ExplorerManager.Provider {
+    ExplorerManager em = new ExplorerManager();
     public TAReportsTopComponent() {
         initComponents();
         setName(Bundle.CTL_TAReportsTopComponent());
         setToolTipText(Bundle.HINT_TAReportsTopComponent());
+        setLayout(new BorderLayout());
+        BeanTreeView btv = new BeanTreeView();
+        btv.setRootVisible(false);
+        add(btv);
 
     }
 
@@ -69,7 +79,7 @@ public final class TAReportsTopComponent extends TopComponent {
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
-        StatusDisplayer.getDefault().setStatusText("TA Reports opened");
+        em.setRootContext(new AbstractNode(Children.create(new FactoryTAReports(), true)));
     }
 
     @Override
@@ -88,4 +98,11 @@ public final class TAReportsTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
+
+    @Override
+    public ExplorerManager getExplorerManager() {
+        return em;
+    }
+    
+    
 }
