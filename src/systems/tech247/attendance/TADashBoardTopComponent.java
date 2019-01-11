@@ -29,11 +29,11 @@ import systems.tech247.util.CetusUTL;
 )
 @TopComponent.Registration(mode = "leftSlidingSide", openAtStartup = false)
 @ActionID(category = "Window", id = "systems.tech247.ta.TADashBoardTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
-@TopComponent.OpenActionRegistration(
-        displayName = "#CTL_TADashBoardAction",
-        preferredID = "TADashBoardTopComponent"
-)
+//@ActionReference(path = "Menu/Window" /*, position = 333 */)
+//@TopComponent.OpenActionRegistration(
+//        displayName = "#CTL_TADashBoardAction",
+//        preferredID = "TADashBoardTopComponent"
+//)
 @Messages({
     "CTL_TADashBoardAction=TADashBoard",
     "CTL_TADashBoardTopComponent=TA DashBoard",

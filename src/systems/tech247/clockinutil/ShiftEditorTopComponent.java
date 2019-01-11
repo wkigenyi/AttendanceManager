@@ -259,7 +259,7 @@ public final class ShiftEditorTopComponent extends TopComponent implements Chang
             }
             
             //Reload to show the changes / new data
-            UtilZKClockin.loadTASetup();
+            //UtilZKClockin.loadTASetup();
         }
 
         @Override

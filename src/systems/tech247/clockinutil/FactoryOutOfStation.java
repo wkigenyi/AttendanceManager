@@ -38,14 +38,14 @@ public class FactoryOutOfStation extends ChildFactory<Object> {
     @Override
     protected boolean createKeys(List<Object> list) {
 
-        list.add(new AddTool(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                TopComponent tc = new OutOfStationEditorTopComponent(emp);
-                tc.open();
-                tc.requestActive();
-            }
-        }));
+//        list.add(new AddTool(new AbstractAction() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                TopComponent tc = new OutOfStationEditorTopComponent(emp);
+//                tc.open();
+//                tc.requestActive();
+//            }
+//        }));
                
        Collection<PtmOutstationVisits> l = new DataAccess().searchOutSS(emp);
         

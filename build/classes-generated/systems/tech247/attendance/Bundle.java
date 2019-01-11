@@ -34,15 +34,29 @@ class Bundle {
      * @return <i>Attendance</i>
      * @see AttendanceRegisterTopComponent
      */
-    static String CTL_AttendanceAction() {
-        return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_AttendanceAction");
+    static String CTL_AttendanceRegisterAction() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_AttendanceRegisterAction");
     }
     /**
      * @return <i>Attendance Register</i>
      * @see AttendanceRegisterTopComponent
      */
-    static String CTL_AttendanceTopComponent() {
-        return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_AttendanceTopComponent");
+    static String CTL_AttendanceRegisterTopComponent() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_AttendanceRegisterTopComponent");
+    }
+    /**
+     * @return <i>Attendance Summary With Charges</i>
+     * @see AttendanceSummaryWithChargeTopComponent
+     */
+    static String CTL_AttendanceSummaryWithChargesAction() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_AttendanceSummaryWithChargesAction");
+    }
+    /**
+     * @return <i>Attendance Summary With Charges</i>
+     * @see AttendanceSummaryWithChargeTopComponent
+     */
+    static String CTL_AttendanceSummaryWithChargesTopComponent() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_AttendanceSummaryWithChargesTopComponent");
     }
     /**
      * @return <i>Clockin Logs</i>
@@ -73,6 +87,20 @@ class Bundle {
         return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_CompDaysTopComponent");
     }
     /**
+     * @return <i>Daily Attendance</i>
+     * @see DailyAttendanceTopComponent
+     */
+    static String CTL_DailyAttendanceAction() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_DailyAttendanceAction");
+    }
+    /**
+     * @return <i>Daily Attendance Register</i>
+     * @see DailyAttendanceTopComponent
+     */
+    static String CTL_DailyAttendanceTopComponent() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_DailyAttendanceTopComponent");
+    }
+    /**
      * @return <i>Out Of Station Visit Editor</i>
      * @see OutOfStationEditorTopComponent
      */
@@ -85,6 +113,20 @@ class Bundle {
      */
     static String CTL_OutOfStationEditorTopComponent() {
         return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_OutOfStationEditorTopComponent");
+    }
+    /**
+     * @return <i>OutOfStationVisits</i>
+     * @see OutOfStationVisitsTopComponent
+     */
+    static String CTL_OutOfStationVisitsAction() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_OutOfStationVisitsAction");
+    }
+    /**
+     * @return <i>Out Of Station Visits</i>
+     * @see OutOfStationVisitsTopComponent
+     */
+    static String CTL_OutOfStationVisitsTopComponent() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_OutOfStationVisitsTopComponent");
     }
     /**
      * @return <i>TADashBoard</i>
@@ -118,8 +160,15 @@ class Bundle {
      * @return 
      * @see AttendanceRegisterTopComponent
      */
-    static String HINT_AttendanceTopComponent() {
-        return org.openide.util.NbBundle.getMessage(Bundle.class, "HINT_AttendanceTopComponent");
+    static String HINT_AttendanceRegisterTopComponent() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "HINT_AttendanceRegisterTopComponent");
+    }
+    /**
+     * @return 
+     * @see AttendanceSummaryWithChargeTopComponent
+     */
+    static String HINT_AttendanceSummaryWithChargesTopComponent() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "HINT_AttendanceSummaryWithChargesTopComponent");
     }
     /**
      * @return 
@@ -136,11 +185,25 @@ class Bundle {
         return org.openide.util.NbBundle.getMessage(Bundle.class, "HINT_CompDaysTopComponent");
     }
     /**
+     * @return 
+     * @see DailyAttendanceTopComponent
+     */
+    static String HINT_DailyAttendanceTopComponent() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "HINT_DailyAttendanceTopComponent");
+    }
+    /**
      * @return <i>This is a OutOfStationEditor window</i>
      * @see OutOfStationEditorTopComponent
      */
     static String HINT_OutOfStationEditorTopComponent() {
         return org.openide.util.NbBundle.getMessage(Bundle.class, "HINT_OutOfStationEditorTopComponent");
+    }
+    /**
+     * @return <i>This is a OutOfStationVisits window</i>
+     * @see OutOfStationVisitsTopComponent
+     */
+    static String HINT_OutOfStationVisitsTopComponent() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "HINT_OutOfStationVisitsTopComponent");
     }
     /**
      * @return <i>This is a TADashBoard window</i>

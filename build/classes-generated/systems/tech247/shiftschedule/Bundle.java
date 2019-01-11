@@ -10,11 +10,25 @@ class Bundle {
         return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_ShiftScheduleAction");
     }
     /**
+     * @return <i>Shift Schedule Editor</i>
+     * @see ShiftScheduleEditorTopComponent
+     */
+    static String CTL_ShiftScheduleEditor() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_ShiftScheduleEditor");
+    }
+    /**
      * @return <i>Shift Scheduler</i>
      * @see ShiftScheduleTopComponent
      */
     static String CTL_ShiftScheduleTopComponent() {
         return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_ShiftScheduleTopComponent");
+    }
+    /**
+     * @return <i>Shift Schedule Editor</i>
+     * @see ShiftScheduleEditorTopComponent
+     */
+    static String HINT_ShiftScheduleEditor() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "HINT_ShiftScheduleEditor");
     }
     /**
      * @return 

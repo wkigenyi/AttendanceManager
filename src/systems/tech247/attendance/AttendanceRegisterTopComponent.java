@@ -20,7 +20,6 @@ import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerModel;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
-import org.openide.awt.ActionReference;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.ExplorerUtils;
 import org.openide.explorer.view.OutlineView;
@@ -29,33 +28,34 @@ import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
-import systems.tech247.clockinutil.FactoryAttendance;
+import systems.tech247.clockinutil.FactoryAttendanceWithComment;
 import systems.tech247.hr.Employees;
+import systems.tech247.hr.VwPtmAttendanceWithComment;
 import systems.tech247.shiftschedule.CustomOutlineCellRenderer;
 
 /**
  * Top component which displays something.
  */
 @ConvertAsProperties(
-        dtd = "-//systems.tech247.shiftschedule//ShiftSchedule//EN",
+        dtd = "-//systems.tech247.attendance//AttendanceRegister//EN",
         autostore = false
 )
 @TopComponent.Description(
-        preferredID = "ShiftSTopComponent",
+        preferredID = "AttendanceRegister",
         //iconBase="SET/PATH/TO/ICON/HERE", 
         persistenceType = TopComponent.PERSISTENCE_NEVER
 )
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
-@ActionID(category = "Window", id = "systems.tech247.attendance.ShiftScheduleTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
-@TopComponent.OpenActionRegistration(
-        displayName = "#CTL_AttendanceAction",
-        preferredID = "AttendanceTopComponent"
-)
+@ActionID(category = "Window", id = "systems.tech247.attendance.AttendanceRegisterTopComponent")
+//@ActionReference(path = "Menu/Window" /*, position = 333 */)
+//@TopComponent.OpenActionRegistration(
+//        displayName = "#CTL_AttendanceRegisterAction",
+//        preferredID = "AttendanceRegisterTopComponent"
+//)
 @Messages({
-    "CTL_AttendanceAction=Attendance",
-    "CTL_AttendanceTopComponent=Attendance Register",
-    "HINT_AttendanceTopComponent="
+    "CTL_AttendanceRegisterAction=Attendance",
+    "CTL_AttendanceRegisterTopComponent=Attendance Register",
+    "HINT_AttendanceRegisterTopComponent="
 })
 public final class AttendanceRegisterTopComponent extends TopComponent implements ExplorerManager.Provider {
     
@@ -71,8 +71,8 @@ public final class AttendanceRegisterTopComponent extends TopComponent implement
     
     public AttendanceRegisterTopComponent(final Employees emp) {
         initComponents();
-        setName(Bundle.CTL_AttendanceTopComponent()+" ->" +emp.getSurName()+" "+emp.getOtherNames());
-        setToolTipText(Bundle.HINT_AttendanceTopComponent());
+        setName(Bundle.CTL_AttendanceRegisterTopComponent()+" ->" +emp.getSurName()+" "+emp.getOtherNames());
+        setToolTipText(Bundle.HINT_AttendanceRegisterTopComponent());
         associateLookup(ExplorerUtils.createLookup(em, getActionMap()));
         this.emp = emp;
         OutlineView ov = new OutlineView("Month Day");
@@ -80,11 +80,13 @@ public final class AttendanceRegisterTopComponent extends TopComponent implement
         ov.addPropertyColumn("clockin", "Time IN");
         ov.addPropertyColumn("clockout", "Time OUT");
         ov.addPropertyColumn("shift", "Shift");
+        ov.addPropertyColumn("hours", "Hours Worked");
+        ov.addPropertyColumn("comment", "Comment");
         //ov.addPropertyColumn("isHoliday", "Holiday");
         //ov.addPropertyColumn("isWeeklyOff", "Weekly Off Day");
         //ov.addPropertyColumn("isCOff", "Compsn Day Off");
         //ov.addPropertyColumn("isLeave", "On Leave");
-        ov.addPropertyColumn("status", "Absent?");
+        
         jtLeave.setBackground(Color.GREEN);
         jtCompensation.setBackground(Color.YELLOW);
         jtHoliday.setBackground(Color.red);
@@ -100,10 +102,10 @@ public final class AttendanceRegisterTopComponent extends TopComponent implement
                 int modelRow  = table.convertRowIndexToModel(row);
                 Node node = em.getRootContext().getChildren().getNodeAt(modelRow);
                 if(node != null){
-                    Attendance schedule = node.getLookup().lookup(Attendance.class);
+                    VwPtmAttendanceWithComment att = node.getLookup().lookup(VwPtmAttendanceWithComment.class);
                    
                         
-                        decorateShift(schedule, cell);
+                        decorateShift(att, cell);
                         
                     
                 }
@@ -139,7 +141,7 @@ public final class AttendanceRegisterTopComponent extends TopComponent implement
                     if(date!=newDate){
                         date = newDate;
                         makeBusy(true);
-                        em.setRootContext(new AbstractNode(Children.create(new FactoryAttendance(emp, date), true)));
+                        em.setRootContext(new AbstractNode(Children.create(new FactoryAttendanceWithComment(emp, date), true)));
                         makeBusy(false);
                     }
                     
@@ -324,16 +326,16 @@ public final class AttendanceRegisterTopComponent extends TopComponent implement
         return em;
     }
     
-    void decorateShift(Attendance shift,Component cell){
+    void decorateShift(VwPtmAttendanceWithComment att,Component cell){
         
-        if(shift != null){
-            if(shift.getIsLeave()){
+        if(att != null){
+            if(att.getOnLeave()){
                 cell.setBackground(Color.GREEN);
-            }else if(shift.getIsCOff()){
+            }else if(att.getIsCOff()){
                 cell.setBackground(Color.yellow);
-            }else if(shift.getIsHoliday()){
+            }else if(att.getIsHoliday()){
                 cell.setBackground(Color.RED);
-            }else if(shift.getIsWeekOff()){
+            }else if(att.getIsWeekOff()){
                 cell.setBackground(Color.PINK);
             }
         }

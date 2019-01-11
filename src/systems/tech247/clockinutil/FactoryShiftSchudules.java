@@ -29,7 +29,7 @@ public class FactoryShiftSchudules extends ChildFactory<PtmShiftSchedule> {
         
         
         for(PtmShiftSchedule s : l){
-            list.add(new ShiftSchedule(s));
+            list.add(s);
         }
         
         
@@ -42,15 +42,13 @@ public class FactoryShiftSchudules extends ChildFactory<PtmShiftSchedule> {
     @Override
     protected Node createNodeForKey(PtmShiftSchedule key){
         Node node = null;
-        if(key instanceof ShiftSchedule){
+      
             try {
-                node = new NodeSchedule((ShiftSchedule)key);
+                node = new NodeSchedule(key);
             } catch (IntrospectionException ex) {
                 Exceptions.printStackTrace(ex);
             }
-        }else{
-            //node = new NodeAddTool((AddTool)key);
-        }    
+          
         return node;
     }
     

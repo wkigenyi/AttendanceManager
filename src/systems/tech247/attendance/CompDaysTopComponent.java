@@ -45,11 +45,11 @@ import systems.tech247.util.NotifyUtil;
 )
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "Window", id = "systems.tech247.attendance.CompDaysComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
-@TopComponent.OpenActionRegistration(
-        displayName = "#CTL_CompDaysAction",
-        preferredID = "CompDaysTopComponent"
-)
+//@ActionReference(path = "Menu/Window" /*, position = 333 */)
+//@TopComponent.OpenActionRegistration(
+//        displayName = "#CTL_CompDaysAction",
+//        preferredID = "CompDaysTopComponent"
+//)
 @Messages({
     "CTL_CompDaysAction=Compensation Days",
     "CTL_CompDaysTopComponent=Compensation Days",

@@ -40,11 +40,11 @@ import systems.tech247.hr.PtmOutstationVisits;
 )
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "Window", id = "systems.tech247.attendance.OutOfStationEditorTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
-@TopComponent.OpenActionRegistration(
-        displayName = "#CTL_OutOfStationEditorAction",
-        preferredID = "OutOfStationEditorTopComponent"
-)
+//@ActionReference(path = "Menu/Window" /*, position = 333 */)
+//@TopComponent.OpenActionRegistration(
+//        displayName = "#CTL_OutOfStationEditorAction",
+//        preferredID = "OutOfStationEditorTopComponent"
+//)
 @Messages({
     "CTL_OutOfStationEditorAction=Out Of Station Visit Editor",
     "CTL_OutOfStationEditorTopComponent=Out Of Station",
@@ -64,11 +64,12 @@ public final class OutOfStationEditorTopComponent extends TopComponent {
     EntityManager entityManager = DataAccess.entityManager;
     
     public OutOfStationEditorTopComponent(){
-        this(null,null);
+        
     }
     
     public OutOfStationEditorTopComponent(Employees emp){
-        this(null, emp);
+        this(null,emp);
+        
     }
     
 
@@ -79,7 +80,6 @@ public final class OutOfStationEditorTopComponent extends TopComponent {
         setToolTipText(Bundle.HINT_OutOfStationEditorTopComponent());
         
         this.visit = visit;
-        this.emp = emp;
         try{
             updateable = entityManager.find(PtmOutstationVisits.class, visit.getOutstationID());
             

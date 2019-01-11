@@ -9,6 +9,9 @@ import java.beans.IntrospectionException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import org.openide.ErrorManager;
@@ -19,9 +22,14 @@ import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
 import org.openide.util.Exceptions;
 import org.openide.util.WeakListeners;
-import org.openide.util.lookup.Lookups;
+import org.openide.util.lookup.AbstractLookup;
+import org.openide.util.lookup.InstanceContent;
+import org.openide.windows.TopComponent;
 import systems.tech247.dbaccess.BooleanEditor;
 import systems.tech247.dbaccess.DataAccess;
+import systems.tech247.hr.PtmShiftSchedule;
+import systems.tech247.shiftschedule.ShiftScheduleEditorTopComponent;
+import systems.tech247.util.CapEditable;
 
 /**
  *
@@ -29,15 +37,29 @@ import systems.tech247.dbaccess.DataAccess;
  */
 public class NodeSchedule extends AbstractNode implements PropertyChangeListener{
     
-    
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+    List<Date> holidays = DataAccess.getHolidayDates();
     EntityManager entityManager = DataAccess.entityManager;
-    ShiftSchedule machine;
-    public NodeSchedule(ShiftSchedule machine) throws IntrospectionException{
-        super(Children.LEAF, Lookups.singleton(machine));
-        this.machine = machine;
-        setDisplayName(machine.getDate());
+    ShiftSchedule schedule;
+    public NodeSchedule(PtmShiftSchedule schedule) throws IntrospectionException{
+        this(schedule,new InstanceContent());
+    }
+            
+    public NodeSchedule(final PtmShiftSchedule schedule, InstanceContent ic) throws IntrospectionException{
+        super(Children.LEAF, new AbstractLookup(ic));
+        
+        ic.add(schedule);
+        ic.add(new CapEditable() {
+            @Override
+            public void edit() {
+                TopComponent tc = new ShiftScheduleEditorTopComponent(schedule);
+                tc.open();
+                tc.requestActive();
+            }
+        });
+        setDisplayName(sdf.format(schedule.getShiftDate()));
         setIconBaseWithExtension("systems/tech247/util/icons/Calendar.png");
-        addPropertyChangeListener(WeakListeners.propertyChange(this, machine));
+        addPropertyChangeListener(WeakListeners.propertyChange(this, schedule));
         
     }
 
@@ -45,17 +67,23 @@ public class NodeSchedule extends AbstractNode implements PropertyChangeListener
     protected Sheet createSheet() {
         Sheet sheet = Sheet.createDefault();
         Sheet.Set set = Sheet.createPropertiesSet();
-        final ShiftSchedule schedule = getLookup().lookup(ShiftSchedule.class);
+        final SimpleDateFormat sdf = new SimpleDateFormat("EEEEE");
+        final PtmShiftSchedule schedule = getLookup().lookup(PtmShiftSchedule.class);
         
         
         
-        try{
-            Property weekDay = new PropertySupport.Reflection(schedule, String.class, "getWeekDay", null);
-            weekDay.setName("weekDay");
-            set.put(weekDay);
-        }catch(NoSuchMethodException ex){
-            ErrorManager.getDefault();
-        }
+        Property weekday = new PropertySupport("weekDay", String.class, "Week day", "Week day", true, false) {
+            @Override
+            public Object getValue() throws IllegalAccessException, InvocationTargetException {
+                return sdf.format(schedule.getShiftDate());
+            }
+            
+            @Override
+            public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+        set.put(weekday);
         try{
             Property sCode = new PropertySupport.Reflection(schedule,String.class,"getsCode",null);
             sCode.setName("sCode");
@@ -64,13 +92,26 @@ public class NodeSchedule extends AbstractNode implements PropertyChangeListener
             ErrorManager.getDefault();
         }    
         
-        try{
-            Property isHoliday = new PropertySupport.Reflection(schedule,Boolean.class,"getIsHoliday",null);
-            isHoliday.setName("isHoliday");
-            set.put(isHoliday);
-        }catch(NoSuchMethodException ex){
-            ErrorManager.getDefault();
-        }
+//        try{
+//            Property isHoliday = new PropertySupport.Reflection(schedule,Boolean.class,"getIsHoliday",null);
+//            isHoliday.setName("isHoliday");
+//            set.put(isHoliday);
+//        }catch(NoSuchMethodException ex){
+//            ErrorManager.getDefault();
+//        }
+        
+//        Property isHoliday = new PropertySupport("isHoliday", Boolean.class, "Holiday", "Holiday", true, false) {
+//            @Override
+//            public Object getValue() throws IllegalAccessException, InvocationTargetException {
+//                return DataAccess.isHoliday(schedule.getShiftDate());
+//            }
+//            
+//            @Override
+//            public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//            }
+//        };
+//        set.put(isHoliday);
         
         
       //Weekly Day Off Can be Changed
@@ -79,7 +120,7 @@ public class NodeSchedule extends AbstractNode implements PropertyChangeListener
             final PropertySupport.Reflection testValue;
             Property isWeekOffP;
             
-            testValue = new PropertySupport.Reflection(schedule, Boolean.class, "weeklyOff");
+            testValue = new PropertySupport.Reflection(schedule, Boolean.class, "IsWeekOff");
             testValue.setPropertyEditorClass(BooleanEditor.class);
             set.put(testValue);
             
@@ -132,7 +173,7 @@ public class NodeSchedule extends AbstractNode implements PropertyChangeListener
             final PropertySupport.Reflection testValue;
             Property isCompOffP;
             
-            testValue = new PropertySupport.Reflection(schedule, Boolean.class, "compOff");
+            testValue = new PropertySupport.Reflection(schedule, Boolean.class, "IsCOff");
             testValue.setPropertyEditorClass(BooleanEditor.class);
             set.put(testValue);
             
@@ -203,8 +244,24 @@ public class NodeSchedule extends AbstractNode implements PropertyChangeListener
             ErrorManager.getDefault();
         }
         
+        Property shift = new PropertySupport("sCode", String.class, "SHIFT", "SHIFT", true, false) {
+            @Override
+            public Object getValue() throws IllegalAccessException, InvocationTargetException {
+                try{
+                    return DataAccess.getShiftByID(schedule.getShiftCode()).getShiftName();
+                }catch(NullPointerException ex){
+                    return "Unknown Shift";
+                }
+            }
+            
+            @Override
+            public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        };
         
         
+        set.put(shift);
         sheet.put(set);
         return sheet;
     }

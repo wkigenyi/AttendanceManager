@@ -9,7 +9,6 @@ import java.awt.BorderLayout;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.awt.StatusDisplayer;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.view.BeanTreeView;
 import org.openide.nodes.AbstractNode;
@@ -48,6 +47,7 @@ public final class TAReportsTopComponent extends TopComponent implements Explore
         initComponents();
         setName(Bundle.CTL_TAReportsTopComponent());
         setToolTipText(Bundle.HINT_TAReportsTopComponent());
+        putClientProperty(TopComponent.PROP_CLOSING_DISABLED, Boolean.TRUE);
         setLayout(new BorderLayout());
         BeanTreeView btv = new BeanTreeView();
         btv.setRootVisible(false);

@@ -10,27 +10,19 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.swing.AbstractAction;
-import javax.swing.JButton;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.netbeans.api.progress.ProgressHandle;
-import org.netbeans.api.progress.ProgressHandleFactory;
 import org.netbeans.api.settings.ConvertAsProperties;
-import org.openide.DialogDisplayer;
-import org.openide.NotifyDescriptor;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.explorer.ExplorerManager;
@@ -41,11 +33,11 @@ import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
-import org.openide.util.RequestProcessor;
 import systems.tech247.clockinutil.FactoryShiftSchudules;
-import systems.tech247.clockinutil.ShiftSchedule;
+import systems.tech247.clockinutil.UtilZKClockin;
 import systems.tech247.dbaccess.DataAccess;
 import systems.tech247.hr.Employees;
+import systems.tech247.hr.PtmShiftSchedule;
 import systems.tech247.util.MessageType;
 import systems.tech247.util.NotifyUtil;
 
@@ -57,17 +49,17 @@ import systems.tech247.util.NotifyUtil;
         autostore = false
 )
 @TopComponent.Description(
-        preferredID = "ShiftSTopComponent",
+        preferredID = "ShiftScheduleTopComponent",
         //iconBase="SET/PATH/TO/ICON/HERE", 
         persistenceType = TopComponent.PERSISTENCE_NEVER
 )
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "Window", id = "systems.tech247.shiftschedule.ShiftScheduleTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
-@TopComponent.OpenActionRegistration(
-        displayName = "#CTL_ShiftScheduleAction",
-        preferredID = "ShiftScheduleTopComponent"
-)
+//@ActionReference(path = "Menu/Window" /*, position = 333 */)
+//@TopComponent.OpenActionRegistration(
+//        displayName = "#CTL_ShiftScheduleAction",
+//        preferredID = "ShiftScheduleTopComponent"
+//)
 @Messages({
     "CTL_ShiftScheduleAction=ShiftSchedule",
     "CTL_ShiftScheduleTopComponent=Shift Scheduler",
@@ -81,6 +73,7 @@ public final class ShiftScheduleTopComponent extends TopComponent implements Exp
     Employees emp;
     JSpinner spinner;
     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:SSS");
+    List<Date> holidays = DataAccess.getHolidayDates();
     
     public ShiftScheduleTopComponent(){
         this(null);
@@ -96,13 +89,13 @@ public final class ShiftScheduleTopComponent extends TopComponent implements Exp
         ov.getOutline().setRootVisible(false);
         ov.addPropertyColumn("weekDay", "Week Day");
         ov.addPropertyColumn("sCode", "Shift");
-        ov.addPropertyColumn("isHoliday", "Holiday");
+        //ov.addPropertyColumn("isHoliday", "Holiday");
         ov.addPropertyColumn("isWeeklyOff", "Weekly Off Day");
         ov.addPropertyColumn("isCOff", "Compsn Day Off");
-        ov.addPropertyColumn("isLeave", "On Leave");
-        jtLeave.setBackground(Color.GREEN);
+        //ov.addPropertyColumn("isLeave", "On Leave");
+        //jtLeave.setBackground(Color.GREEN);
         jtCompensation.setBackground(Color.YELLOW);
-        jtHoliday.setBackground(Color.red);
+        //jtHoliday.setBackground(Color.red);
         jtWeeklyOff.setBackground(Color.PINK);
         jpView.setLayout(new BorderLayout());
         jpView.add(ov);
@@ -115,7 +108,7 @@ public final class ShiftScheduleTopComponent extends TopComponent implements Exp
                 int modelRow  = table.convertRowIndexToModel(row);
                 Node node = em.getRootContext().getChildren().getNodeAt(modelRow);
                 if(node != null){
-                    ShiftSchedule schedule = node.getLookup().lookup(ShiftSchedule.class);
+                    PtmShiftSchedule schedule = node.getLookup().lookup(PtmShiftSchedule.class);
                    
                         
                         decorateShift(schedule, cell);
@@ -176,7 +169,7 @@ public final class ShiftScheduleTopComponent extends TopComponent implements Exp
                         NotifyUtil.show("No Shift Schedules For "+sdf.format(newDate), "Duplicate Last Month Schedule?", MessageType.QUESTION, new AbstractAction() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                duplicateShiftSchedule(newDate);
+                                UtilZKClockin.duplicateShiftSchedule(newDate);
                             }
                         }, false);
                     }
@@ -200,12 +193,8 @@ public final class ShiftScheduleTopComponent extends TopComponent implements Exp
 
         jpMonthHolder = new javax.swing.JPanel();
         jpView = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jtLeave = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jtCompensation = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jtHoliday = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jtWeeklyOff = new javax.swing.JTextField();
 
@@ -235,20 +224,10 @@ public final class ShiftScheduleTopComponent extends TopComponent implements Exp
             .addGap(0, 246, Short.MAX_VALUE)
         );
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(ShiftScheduleTopComponent.class, "ShiftScheduleTopComponent.jLabel1.text")); // NOI18N
-
-        jtLeave.setEditable(false);
-        jtLeave.setText(org.openide.util.NbBundle.getMessage(ShiftScheduleTopComponent.class, "ShiftScheduleTopComponent.jtLeave.text")); // NOI18N
-
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(ShiftScheduleTopComponent.class, "ShiftScheduleTopComponent.jLabel2.text")); // NOI18N
 
         jtCompensation.setEditable(false);
         jtCompensation.setText(org.openide.util.NbBundle.getMessage(ShiftScheduleTopComponent.class, "ShiftScheduleTopComponent.jtCompensation.text")); // NOI18N
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(ShiftScheduleTopComponent.class, "ShiftScheduleTopComponent.jLabel3.text")); // NOI18N
-
-        jtHoliday.setEditable(false);
-        jtHoliday.setText(org.openide.util.NbBundle.getMessage(ShiftScheduleTopComponent.class, "ShiftScheduleTopComponent.jtHoliday.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(ShiftScheduleTopComponent.class, "ShiftScheduleTopComponent.jLabel4.text")); // NOI18N
 
@@ -263,22 +242,14 @@ public final class ShiftScheduleTopComponent extends TopComponent implements Exp
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtLeave, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jtCompensation, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtHoliday, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jtWeeklyOff, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 146, Short.MAX_VALUE)
                         .addComponent(jpMonthHolder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jpView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -289,12 +260,8 @@ public final class ShiftScheduleTopComponent extends TopComponent implements Exp
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1)
-                        .addComponent(jtLeave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel2)
                         .addComponent(jtCompensation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel3)
-                        .addComponent(jtHoliday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel4)
                         .addComponent(jtWeeklyOff, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jpMonthHolder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -305,15 +272,11 @@ public final class ShiftScheduleTopComponent extends TopComponent implements Exp
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jpMonthHolder;
     private javax.swing.JPanel jpView;
     private javax.swing.JTextField jtCompensation;
-    private javax.swing.JTextField jtHoliday;
-    private javax.swing.JTextField jtLeave;
     private javax.swing.JTextField jtWeeklyOff;
     // End of variables declaration//GEN-END:variables
     @Override
@@ -350,7 +313,7 @@ public final class ShiftScheduleTopComponent extends TopComponent implements Exp
                         NotifyUtil.show("No Shift Schedules For "+sdf.format(newDate), "Duplicate Last Month Schedule?", MessageType.QUESTION, new AbstractAction() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                duplicateShiftSchedule(newDate);
+                                UtilZKClockin.duplicateShiftSchedule(newDate);
                             }
                         }, false);
                     }
@@ -399,15 +362,13 @@ public final class ShiftScheduleTopComponent extends TopComponent implements Exp
         return em;
     }
     
-    void decorateShift(ShiftSchedule shift,Component cell){
+    void decorateShift(PtmShiftSchedule shift,Component cell){
         
         if(shift != null){
-            if(shift.getIsLeave()){
-                cell.setBackground(Color.GREEN);
-            }else if(shift.getIsCOff()){
+            if(shift.getIsCOff()){
                 cell.setBackground(Color.yellow);
-            }else if(shift.getIsHoliday()){
-                cell.setBackground(Color.RED);
+//            }else if(!DataAccess.isHoliday(shift.getShiftDate())){
+//                cell.setBackground(Color.RED);
             }else if(shift.getIsWeekOff()){
                 cell.setBackground(Color.PINK);
             }
@@ -416,150 +377,7 @@ public final class ShiftScheduleTopComponent extends TopComponent implements Exp
         
     }
     
-    void duplicateShiftSchedule(Date date){
-        NotifyDescriptor nd = new NotifyDescriptor(
-                "Duplicate Previous Shift Schedules?", //Message or component 
-                "Shift Schedules", //Title
-                NotifyDescriptor.YES_NO_OPTION,//Options 
-                NotifyDescriptor.QUESTION_MESSAGE,//Symbol 
-                new Object[]{
-                    new JButton("Yes, For Only This Employee"){
-            
-                        
-                        
-                    },
-                    new JButton("Yes, All Employees"){
-            @Override
-            public void addActionListener(ActionListener l) {
-                super.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        // We are at the beginning of the month
-                Runnable task;
-                task = () -> {
-                    ProgressHandle ph = ProgressHandleFactory.createHandle("Filling The Schedules");
-                    ph.start();
-                    //Delete the existing schedules for the month
-                    Calendar cal = Calendar.getInstance();
- 
-                    cal.setTime(date);
-                    cal.set(Calendar.DATE, 0);
-                    cal.set(Calendar.HOUR, 12);
-                    cal.set(Calendar.MINUTE, 0);
-                    cal.set(Calendar.SECOND,0);
-                    cal.set(Calendar.MILLISECOND, 0);
-                    
-                    int currentMonthInDB = cal.get(Calendar.MONTH)+1;
-                    int currentYear = cal.get(Calendar.YEAR);
-                    ph.progress("Cleaning The Month,  Deleting existing schedules");
-                    String sql = "DELETE FROM PtmShiftSchedule WHERE year(shiftDate) = "+currentYear+" AND month(ShiftDate)="+currentMonthInDB+"";
-                    Query query = entityManager.createNativeQuery(sql);
-                    entityManager.getTransaction().begin();
-                    query.executeUpdate();
-                    entityManager.getTransaction().commit();
-                    //Get the list of employees that are to be updated
-                    ph.progress("Get them employees");
-                    List<Employees> employeeList = DataAccess.searchEmployees(
-                            "SELECT e FROM Employees e WHERE e.isDisengaged = 0"
-                    );
-                    
-                    
-                    for(Employees emp: employeeList){
-                        //Reset the date for the new employee
-                        cal.setTime(date);
-                        cal.set(Calendar.DATE, 1);
-                        cal.set(Calendar.HOUR_OF_DAY,0);
-                        cal.set(Calendar.MINUTE, 0);
-                        cal.set(Calendar.SECOND,0);
-                        cal.set(Calendar.MILLISECOND, 0);
-                        
-                        
-                        
-                        int latestShiftCode = 5;
-                        int month =cal.get(Calendar.MONTH);
-                        int monthV = cal.get(Calendar.MONTH);
-                        int day = 1;
-                        //Get the latest shiftcode
-                        String latestCode="SELECT TOP 1 ShiftCode FROM PtmShiftSchedule WHERE EmployeeID="+emp.getEmployeeID()+" AND  NOT(ShiftCode=0)";
-                        Query queryCode = entityManager.createNativeQuery(latestCode);
-                        try{
-                            latestShiftCode=(int)queryCode.getSingleResult();
-                        }catch(Exception ex){
-                            
-                        }
-                        
-                        while(month==monthV){
-                            ph.progress("Posting for "+emp.getSurName()+" "+emp.getOtherNames()+" Day "+day);
-                            String getInsertID = "SELECT MAX(shiftscheduleid) from PtmShiftSchedule";
-                            Query queryID = entityManager.createNativeQuery(getInsertID);
-                            int id = ((BigDecimal)queryID.getSingleResult()).intValue();
-                            int newID = id+1;
-                            String insertQuery = 
-                                    "INSERT INTO [dbo].[PtmShiftSchedule]\n" +
-                                    "           ([ShiftScheduleId]\n" +//put
-                                    "           ,[CoCode]\n" +//default 1
-                                    "           ,[EmployeeID]\n" +//get from e
-                                    "           ,[ShiftDate]\n" +//the date
-                                    "           ,[ShiftCode]\n" +//the latest one
-                                    "           ,[DayType]\n" +//null
-                                    "           ,[IsHoliday]\n" +//null
-                                    "           ,[IsWeekOff]\n" +//0
-                                    "           ,[IsCOff]\n" +//0
-                                    "           ,[IsLeave]\n" +//0
-                                    "           ,[IsOT2Shift]\n" +//null
-                                    "           ,[UserID]\n" +//null
-                                    "           ,[EntryDate]\n" +//today
-                                    "           ,[DepartmentCode]\n" +//null
-                                    "           ,[MasterTwoCode])\n" +//null
-                                    "     VALUES\n" +
-                                    "           (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-                            
-                            Query queryInsert = entityManager.createNativeQuery(insertQuery);
-                            queryInsert.setParameter(1, newID);
-                            queryInsert.setParameter(2, 1);
-                            queryInsert.setParameter(3, emp.getEmployeeID());
-                            queryInsert.setParameter(4, cal.getTime());
-                            queryInsert.setParameter(5, latestShiftCode);
-                            queryInsert.setParameter(8, 0);
-                            queryInsert.setParameter(9, 0);
-                            queryInsert.setParameter(10,0);
-                            queryInsert.setParameter(13, new Date());
-                            
-                            entityManager.getTransaction().begin();
-                            queryInsert.executeUpdate();
-                            entityManager.getTransaction().commit();
-                            //Now go to the next date
-                            cal.add(Calendar.DATE, 1);
-                            monthV= cal.get(Calendar.MONTH);
-                            day = day+1;
-                            
-                        }
-                    }
-                    ph.finish();
-                };
-                
-                RequestProcessor.getDefault().post(task);
-                    }
-                });
-                
-                
-                
-                
-                
-
-                
-            }
-                        
-                        
-                    },
-                    NotifyDescriptor.CANCEL_OPTION
-                }, 
-                null);
-        
-        DialogDisplayer.getDefault().notify(nd);
-        
-        
-    }
+    
     
     
     

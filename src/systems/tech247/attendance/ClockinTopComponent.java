@@ -15,7 +15,6 @@ import java.util.Date;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import org.netbeans.api.settings.ConvertAsProperties;
-import org.openide.ErrorManager;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.explorer.ExplorerManager;
@@ -45,11 +44,11 @@ import systems.tech247.util.NotifyUtil;
 )
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "Window", id = "systems.tech247.attendance.ClockinTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
-@TopComponent.OpenActionRegistration(
-        displayName = "#CTL_ClockinAction",
-        preferredID = "ClockinTopComponent"
-)
+//@ActionReference(path = "Menu/Window" /*, position = 333 */)
+//@TopComponent.OpenActionRegistration(
+//        displayName = "#CTL_ClockinAction",
+//        preferredID = "ClockinTopComponent"
+//)
 @Messages({
     "CTL_ClockinAction=Clockin Logs",
     "CTL_ClockinTopComponent=Clockin Logs",

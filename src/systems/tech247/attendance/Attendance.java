@@ -42,7 +42,7 @@ public class Attendance extends ShiftSchedule {
 
     public String getClockin() {
         try{
-        return sdf.format(DataAccess.getCheckIn(schedule.getEmployeeID(), schedule.getShiftDate()));
+            return sdf.format(DataAccess.getCheckIn(schedule.getEmployeeID(), schedule.getShiftDate()));
         }catch(Exception ex){
             return "No Clockin";
         }

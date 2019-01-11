@@ -36,11 +36,11 @@ import systems.tech247.hr.OrganizationUnits;
 )
 @TopComponent.Registration(mode = "editor", openAtStartup = true, roles = {"ta"})
 @ActionID(category = "Window", id = "systems.tech247.clockinutil.DepartmentAttendanceTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
-@TopComponent.OpenActionRegistration(
-        displayName = "#CTL_DepartmentAttendanceAction",
-        preferredID = "DepartmentAttendanceTopComponent"
-)
+//@ActionReference(path = "Menu/Window" /*, position = 333 */)
+//@TopComponent.OpenActionRegistration(
+//        displayName = "#CTL_DepartmentAttendanceAction",
+//        preferredID = "DepartmentAttendanceTopComponent"
+//)
 @Messages({
     "CTL_DepartmentAttendanceAction=DepartmentAttendance",
     "CTL_DepartmentAttendanceTopComponent=Department Attendance",

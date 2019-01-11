@@ -27,15 +27,15 @@ import org.openide.util.NbBundle.Messages;
 @TopComponent.Description(
         preferredID = "AttendanceTopComponent",
         //iconBase="SET/PATH/TO/ICON/HERE", 
-        persistenceType = TopComponent.PERSISTENCE_ALWAYS
+        persistenceType = TopComponent.PERSISTENCE_NEVER
 )
 @TopComponent.Registration(mode = "explorer", openAtStartup = true, roles = {"ta"})
 @ActionID(category = "Window", id = "systems.tech247.clockinutil.AttendanceTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
-@TopComponent.OpenActionRegistration(
-        displayName = "#CTL_AttendanceAction",
-        preferredID = "AttendanceTopComponent"
-)
+//@ActionReference(path = "Menu/Window" /*, position = 333 */)
+//@TopComponent.OpenActionRegistration(
+//        displayName = "#CTL_AttendanceAction",
+//        preferredID = "AttendanceTopComponent"
+//)
 @Messages({
     "CTL_AttendanceAction=Attendance",
     "CTL_AttendanceTopComponent=Attendance",

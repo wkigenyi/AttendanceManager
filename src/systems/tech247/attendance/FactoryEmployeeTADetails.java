@@ -51,7 +51,7 @@ public class FactoryEmployeeTADetails extends ChildFactory<SetupItem> {
                 tc.requestActive();
             }
         }));
-        toPopulate.add(new SetupItem("Clockin Logs", new AbstractAction() {
+        toPopulate.add(new SetupItem("Transactions / Clockin Logs", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 TopComponent tc = new ClockinTopComponent(emp);
@@ -60,25 +60,32 @@ public class FactoryEmployeeTADetails extends ChildFactory<SetupItem> {
             }
         }));
         
-        toPopulate.add(new SetupItem("Pending Compensation Days", new AbstractAction() {
+//        toPopulate.add(new SetupItem("Pending Compensation Days", new AbstractAction() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                TopComponent tc = new CompDaysTopComponent(emp);
+//                tc.open();
+//                tc.requestActive();
+//            }
+//        }));
+        
+        toPopulate.add(new SetupItem("Out Of Station Visits",new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TopComponent tc = new CompDaysTopComponent(emp);
+                TopComponent tc = new OutOfStationVisitsTopComponent(emp);
                 tc.open();
                 tc.requestActive();
             }
         }));
         
-        toPopulate.add(new SetupItem("Out Of Station Visits",Children.create(new FactoryOutOfStation(emp), true)));
-        
-        toPopulate.add(new SetupItem("Absent Days", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                TopComponent tc = new AbsentDaysTopComponent(emp);
-                tc.open();
-                tc.requestActive();
-            }
-        }));
+//        toPopulate.add(new SetupItem("Absent Days", new AbstractAction() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                TopComponent tc = new AbsentDaysTopComponent(emp);
+//                tc.open();
+//                tc.requestActive();
+//            }
+//        }));
         
         
         

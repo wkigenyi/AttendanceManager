@@ -33,11 +33,11 @@ import systems.tech247.util.QueryEmployee;
 )
 @TopComponent.Registration(mode = "explorer", openAtStartup = false/*, roles = {"ta"}*/)
 @ActionID(category = "Window", id = "systems.tech247.attendance.AttEmployeeListTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
-@TopComponent.OpenActionRegistration(
-        displayName = "#CTL_AttEmployeeListAction",
-        preferredID = "AttEmployeeListTopComponent"
-)
+//@ActionReference(path = "Menu/Window" /*, position = 333 */)
+//@TopComponent.OpenActionRegistration(
+//        displayName = "#CTL_AttEmployeeListAction",
+//        preferredID = "AttEmployeeListTopComponent"
+//)
 @Messages({
     "CTL_AttEmployeeListAction=EmployeeList",
     "CTL_AttEmployeeListTopComponent=Employee List",
@@ -54,6 +54,7 @@ public final class AttEmployeeListTopComponent extends TopComponent implements E
         initComponents();
         setName(Bundle.CTL_AttEmployeeListTopComponent());
         setToolTipText(Bundle.HINT_AttEmployeeListTopComponent());
+        putClientProperty(TopComponent.PROP_CLOSING_DISABLED, Boolean.TRUE);
         vPanel.setLayout(new BorderLayout());
         BeanTreeView btv = new BeanTreeView();
         btv.setRootVisible(false);

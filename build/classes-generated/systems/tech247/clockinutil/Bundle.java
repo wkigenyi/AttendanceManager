@@ -38,6 +38,20 @@ class Bundle {
         return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_ShiftEditorTopComponent");
     }
     /**
+     * @return <i>Shifts</i>
+     * @see ShiftsTopComponent
+     */
+    static String CTL_ShiftsAction() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_ShiftsAction");
+    }
+    /**
+     * @return <i>Shifts Window</i>
+     * @see ShiftsTopComponent
+     */
+    static String CTL_ShiftsTopComponent() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_ShiftsTopComponent");
+    }
+    /**
      * @return <i>TAClockin</i>
      * @see TAClockinTopComponent
      */
@@ -85,6 +99,13 @@ class Bundle {
      */
     static String HINT_ShiftEditorTopComponent() {
         return org.openide.util.NbBundle.getMessage(Bundle.class, "HINT_ShiftEditorTopComponent");
+    }
+    /**
+     * @return <i>This is a Shifts window</i>
+     * @see ShiftsTopComponent
+     */
+    static String HINT_ShiftsTopComponent() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "HINT_ShiftsTopComponent");
     }
     /**
      * @return <i>This is a TAClockin window</i>

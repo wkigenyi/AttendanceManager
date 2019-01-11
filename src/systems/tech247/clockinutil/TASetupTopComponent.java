@@ -9,9 +9,10 @@ import java.awt.BorderLayout;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.awt.StatusDisplayer;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.view.BeanTreeView;
+import org.openide.nodes.AbstractNode;
+import org.openide.nodes.Children;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 
@@ -29,11 +30,11 @@ import org.openide.util.NbBundle.Messages;
 )
 @TopComponent.Registration(mode = "explorer", openAtStartup = false/*, roles = {"ta"}*/)
 @ActionID(category = "Window", id = "systems.tech247.clockinutil.TASetupTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
-@TopComponent.OpenActionRegistration(
-        displayName = "#CTL_TASetupAction",
-        preferredID = "TASetupTopComponent"
-)
+//@ActionReference(path = "Menu/Window" /*, position = 333 */)
+//@TopComponent.OpenActionRegistration(
+//        displayName = "#CTL_TASetupAction",
+//        preferredID = "TASetupTopComponent"
+//)
 @Messages({
     "CTL_TASetupAction=TASetup",
     "CTL_TASetupTopComponent=T & A Setup",
@@ -41,11 +42,12 @@ import org.openide.util.NbBundle.Messages;
 })
 public final class TASetupTopComponent extends TopComponent implements ExplorerManager.Provider {
 
-    ExplorerManager em = UtilZKClockin.emTAsetup;
+    ExplorerManager em = new ExplorerManager();
     public TASetupTopComponent() {
         initComponents();
         setName(Bundle.CTL_TASetupTopComponent());
         setToolTipText(Bundle.HINT_TASetupTopComponent());
+        putClientProperty(TopComponent.PROP_CLOSING_DISABLED, Boolean.TRUE);
         BeanTreeView btv = new BeanTreeView();
         setLayout(new BorderLayout());
         btv.setRootVisible(false);
@@ -77,7 +79,7 @@ public final class TASetupTopComponent extends TopComponent implements ExplorerM
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
-        StatusDisplayer.getDefault().setStatusText("Opened");
+        em.setRootContext(new AbstractNode(Children.create(new FactoryTASetup(), true)));
     }
 
     @Override
@@ -88,7 +90,7 @@ public final class TASetupTopComponent extends TopComponent implements ExplorerM
     @Override
     protected void componentActivated() {
         super.componentActivated(); 
-        UtilZKClockin.loadTASetup();
+        
 //To change body of generated methods, choose Tools | Templates.
     }
     

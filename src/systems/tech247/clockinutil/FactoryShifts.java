@@ -24,26 +24,11 @@ import systems.tech247.util.NodeAddTool;
  */
 public class FactoryShifts extends ChildFactory<Object> {
     
-    boolean edit;
-    String sql;
+    String sql = "SELECT s FROM PtmShifts s";
     
-    public FactoryShifts(String sql,boolean edit){
-        this.edit = edit;
-        this.sql = sql;
-    }
-
     @Override
     protected boolean createKeys(List<Object> list) {
-        if(edit){
-            list.add(new AddTool(new AbstractAction() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    TopComponent tc = new ShiftEditorTopComponent();
-                    tc.open();
-                    tc.requestActive();
-                }
-            }));
-        }
+        
         
         list.addAll(DataAccess.getShifts(sql));
         
