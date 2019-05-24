@@ -150,14 +150,14 @@ public class AttReportTemplate {
 	/**
 	 * Creates custom component which is possible to add to any report band component
 	 */
-	public static ComponentBuilder<?, ?> createTitleComponent(CompanyDetails company,String from,String to,String dept,String label)throws IOException {
+	public static ComponentBuilder<?, ?> createTitleComponent(CompanyDetails company,String from,String to,String label)throws IOException {
 		return cmp.horizontalList()
 				.add(
 						createDynamicComponent(company),
                                                 cmp.verticalList(
                                                         cmp.text(label).setStyle(bold18CenteredStyle).setHorizontalTextAlignment(HorizontalTextAlignment.RIGHT),
-                                                        cmp.text(from +" to "+ to).setHorizontalTextAlignment(HorizontalTextAlignment.RIGHT),
-                                                        cmp.text(dept).setHorizontalTextAlignment(HorizontalTextAlignment.RIGHT).setStyle(italicStyle)
+                                                        cmp.text(from +" to "+ to).setHorizontalTextAlignment(HorizontalTextAlignment.RIGHT)
+                                                        //cmp.text(dept).setHorizontalTextAlignment(HorizontalTextAlignment.RIGHT).setStyle(italicStyle)
                                                 )
 						)
 				.newRow()

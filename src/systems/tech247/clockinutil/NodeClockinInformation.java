@@ -13,6 +13,7 @@ import org.openide.nodes.Children;
 import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
 import org.openide.util.lookup.Lookups;
+import systems.tech247.dbaccess.DataAccess;
 import systems.tech247.hr.Checkinout;
 
 
@@ -71,7 +72,7 @@ public class NodeClockinInformation extends AbstractNode{
         Property sno = new PropertySupport("sno", String.class, "Machine Serial#", "Serial Number", true, false) {
             @Override
             public Object getValue() throws IllegalAccessException, InvocationTargetException {
-                return clockin.getSensorid();
+                return DataAccess.getSerialNo(clockin.getCheckinoutPK().getChecktime());
             }
             
             @Override

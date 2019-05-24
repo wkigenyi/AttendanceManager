@@ -66,6 +66,20 @@ class Bundle {
         return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_ClockinAction");
     }
     /**
+     * @return <i>ClockinLogEditor</i>
+     * @see ClockinLogEditorTopComponent
+     */
+    static String CTL_ClockinLogEditorAction() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_ClockinLogEditorAction");
+    }
+    /**
+     * @return <i>Insert Manual Clockin Log</i>
+     * @see ClockinLogEditorTopComponent
+     */
+    static String CTL_ClockinLogEditorTopComponent() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_ClockinLogEditorTopComponent");
+    }
+    /**
      * @return <i>Clockin Logs</i>
      * @see ClockinTopComponent
      */
@@ -169,6 +183,13 @@ class Bundle {
      */
     static String HINT_AttendanceSummaryWithChargesTopComponent() {
         return org.openide.util.NbBundle.getMessage(Bundle.class, "HINT_AttendanceSummaryWithChargesTopComponent");
+    }
+    /**
+     * @return <i>This is a ClockinLogEditor window</i>
+     * @see ClockinLogEditorTopComponent
+     */
+    static String HINT_ClockinLogEditorTopComponent() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "HINT_ClockinLogEditorTopComponent");
     }
     /**
      * @return 

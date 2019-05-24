@@ -74,7 +74,7 @@ public class AttendanceWithComment extends ShiftSchedule {
 
     public String getShift() {
         try{
-       return DataAccess.getShiftByID(schedule.getShiftCode()).getShiftName();
+       return schedule.getShiftCode().getShiftName();
         }catch(NullPointerException ex){
             return "ZZ Shift";
         }

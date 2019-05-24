@@ -8,7 +8,6 @@ package systems.tech247.tareports;
 import java.awt.BorderLayout;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
-import org.openide.awt.ActionReference;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.view.BeanTreeView;
 import org.openide.nodes.AbstractNode;
@@ -31,11 +30,11 @@ import systems.tech247.clockinutil.FactoryTAReports;
 )
 @TopComponent.Registration(mode = "explorer", openAtStartup = false)
 @ActionID(category = "Window", id = "systems.tech247.tareports.TAReportsTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
-@TopComponent.OpenActionRegistration(
-        displayName = "#CTL_TAReportsAction",
-        preferredID = "TAReportsTopComponent"
-)
+//@ActionReference(path = "Menu/Window" /*, position = 333 */)
+//@TopComponent.OpenActionRegistration(
+//        displayName = "#CTL_TAReportsAction",
+//        preferredID = "TAReportsTopComponent"
+//)
 @Messages({
     "CTL_TAReportsAction=TAReports",
     "CTL_TAReportsTopComponent=TA Reports",
@@ -47,7 +46,12 @@ public final class TAReportsTopComponent extends TopComponent implements Explore
         initComponents();
         setName(Bundle.CTL_TAReportsTopComponent());
         setToolTipText(Bundle.HINT_TAReportsTopComponent());
+        putClientProperty(TopComponent.PROP_UNDOCKING_DISABLED, Boolean.TRUE);
         putClientProperty(TopComponent.PROP_CLOSING_DISABLED, Boolean.TRUE);
+        putClientProperty(TopComponent.PROP_DND_COPY_DISABLED, Boolean.TRUE);
+        putClientProperty(TopComponent.PROP_DRAGGING_DISABLED, Boolean.TRUE);
+        putClientProperty(TopComponent.PROP_MAXIMIZATION_DISABLED, Boolean.TRUE);
+        putClientProperty(TopComponent.PROP_SLIDING_DISABLED, Boolean.TRUE);
         setLayout(new BorderLayout());
         BeanTreeView btv = new BeanTreeView();
         btv.setRootVisible(false);

@@ -13,7 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import org.openide.ErrorManager;
 import org.openide.awt.StatusDisplayer;
 import org.openide.nodes.AbstractNode;
@@ -143,12 +142,19 @@ public class NodeSchedule extends AbstractNode implements PropertyChangeListener
                     
                         //Confirm we are editing
                         StatusDisplayer.getDefault().setStatusText("Weekly Off Updated");
-                        String updateQuery = "UPDATE [dbo].[PtmShiftSchedule]\n" +
-"   SET [IsWeekOff] = '"+val+"' WHERE ShiftScheduleId = "+schedule.getShiftScheduleId()+"";
-                        Query query = entityManager.createNativeQuery(updateQuery);
+                        
+                        PtmShiftSchedule s = entityManager.find(PtmShiftSchedule.class, schedule.getShiftScheduleId());
+                        boolean bVal = (boolean)val;
+                        
+                        s.setIsWeekOff(bVal);
                         entityManager.getTransaction().begin();
-                        query.executeUpdate();
                         entityManager.getTransaction().commit();
+//                        String updateQuery = "UPDATE [dbo].[PtmShiftSchedule]\n" +
+//"   SET [IsWeekOff] = '"+val+"' WHERE ShiftScheduleId = "+schedule.getShiftScheduleId()+"";
+//                        Query query = entityManager.createNativeQuery(updateQuery);
+//                        entityManager.getTransaction().begin();
+//                        query.executeUpdate();
+//                        entityManager.getTransaction().commit();
                         
                         
                         testValue.setValue(val);
@@ -197,6 +203,16 @@ public class NodeSchedule extends AbstractNode implements PropertyChangeListener
                         //Confirm we are editing
                         StatusDisplayer.getDefault().setStatusText("Compensatory Day Off Assigned");
                         //Show the change in the Property
+                        PtmShiftSchedule s = entityManager.find(PtmShiftSchedule.class, schedule.getShiftScheduleId());
+                        boolean bVal = (boolean)val;
+                        
+                        s.setIsCOff(bVal);
+                        entityManager.getTransaction().begin();
+                        entityManager.getTransaction().commit();
+                        
+                        
+                        
+                        
                         testValue.setValue(val);
                         
                         
@@ -248,7 +264,7 @@ public class NodeSchedule extends AbstractNode implements PropertyChangeListener
             @Override
             public Object getValue() throws IllegalAccessException, InvocationTargetException {
                 try{
-                    return DataAccess.getShiftByID(schedule.getShiftCode()).getShiftName();
+                    return schedule.getShiftCode().getShiftName();
                 }catch(NullPointerException ex){
                     return "Unknown Shift";
                 }

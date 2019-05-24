@@ -3,10 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Wilfred/Desktop/Cetus/EndeavourZKClockin/src/systems/tech247/clockinutil/UtilZKClockin.java</file>
-            <file>file:/C:/Users/Wilfred/Desktop/Cetus/EndeavourZKClockin/src/systems/tech247/attendance/AttendanceSummaryWithChargeTopComponent.java</file>
-            <file>file:/C:/Users/Wilfred/Desktop/Cetus/EndeavourZKClockin/src/systems/tech247/tareports/ReportAttendanceSummary.java</file>
-            <file>file:/C:/Users/Wilfred/Desktop/Cetus/EndeavourZKClockin/src/systems/tech247/tareports/AttReportSummaryTemplate.java</file>
+            <file>file:/C:/Users/Wilfred/Desktop/Cetus/EndeavourZKClockin/src/systems/tech247/attendance/Attendance.java</file>
+            <file>file:/C:/Users/Wilfred/Desktop/Cetus/EndeavourZKClockin/src/systems/tech247/attendance/AttendanceWithComment.java</file>
         </group>
     </open-files>
 </project-private>

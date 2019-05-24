@@ -55,7 +55,7 @@ public class FactoryAttendanceWithComment extends ChildFactory<VwPtmAttendanceWi
 
             String sql = "select * FROM vwPtmAttendanceWithComment where EmployeeID="+emp.getEmployeeID()+" AND MONTH(ShiftDate)="+month+" and YEAR(ShiftDate)="+yr+"";
         
-            List<VwPtmAttendanceWithComment> l = DataAccess.getAttendance(sql);
+            List<VwPtmAttendanceWithComment> l = DataAccess.getAttendance(sql,from,to);
         
             l.forEach((s) -> {
                 list.add(s);
@@ -67,7 +67,7 @@ public class FactoryAttendanceWithComment extends ChildFactory<VwPtmAttendanceWi
             
             String sql = "select * FROM vwPtmAttendanceWithComment where ShiftDate>='"+datefrom+"' AND ShiftDate<='"+dateto+"'";
         
-            List<VwPtmAttendanceWithComment> l = DataAccess.getAttendance(sql);
+            List<VwPtmAttendanceWithComment> l = DataAccess.getAttendance(sql,from,to);
         
             l.forEach((s) -> {
                 list.add(s);

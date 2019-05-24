@@ -11,7 +11,6 @@ import java.util.HashMap;
 import javax.swing.AbstractAction;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
-import org.openide.awt.ActionReference;
 import org.openide.awt.StatusDisplayer;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.ExplorerUtils;
@@ -19,8 +18,12 @@ import org.openide.explorer.view.OutlineView;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 import org.openide.util.NbPreferences;
+import org.openide.util.lookup.AbstractLookup;
+import org.openide.util.lookup.InstanceContent;
+import org.openide.util.lookup.ProxyLookup;
 import systems.tech247.clockin.ZKOptions;
 import systems.tech247.clockin.ZKSoapLib;
+import systems.tech247.util.CapDownloadable;
 
 /**
  * Top component which displays something.
@@ -32,15 +35,15 @@ import systems.tech247.clockin.ZKSoapLib;
 @TopComponent.Description(
         preferredID = "TAClockinTopComponent",
         //iconBase="SET/PATH/TO/ICON/HERE", 
-        persistenceType = TopComponent.PERSISTENCE_ALWAYS
+        persistenceType = TopComponent.PERSISTENCE_NEVER
 )
-@TopComponent.Registration(mode = "explorer", openAtStartup = false)
+@TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "Window", id = "systems.tech247.endeavorclockin.TAClockinTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
-@TopComponent.OpenActionRegistration(
-        displayName = "#CTL_TAClockinAction",
-        preferredID = "TAClockinTopComponent"
-)
+//@ActionReference(path = "Menu/Window" /*, position = 333 */)
+//@TopComponent.OpenActionRegistration(
+//        displayName = "#CTL_TAClockinAction",
+//        preferredID = "TAClockinTopComponent"
+//)
 @Messages({
     "CTL_TAClockinAction=TAClockin",
     "CTL_TAClockinTopComponent=Time & Attendance Records",
@@ -48,8 +51,27 @@ import systems.tech247.clockin.ZKSoapLib;
 })
 public final class TAClockinTopComponent extends TopComponent implements ExplorerManager.Provider {
     
+    InstanceContent content = new InstanceContent();
+    AbstractLookup lkp = new AbstractLookup(content);
     ExplorerManager em = UtilZKClockin.attendanceEM;
     HashMap map = new HashMap();
+    
+    CapDownloadable enableDownload;
+    
+    //Get Options for the applications local options
+        String comPort = 
+        NbPreferences.forModule(ClockinMachinesPanel.class).get("ZKComPort","");
+        String soapPort = 
+        NbPreferences.forModule(ClockinMachinesPanel.class).get("ZKSoapPort", "");
+        String ipAddress = 
+        NbPreferences.forModule(ClockinMachinesPanel.class).get("ZKIPAddress","");
+        String timeOut = 
+        NbPreferences.forModule(ClockinMachinesPanel.class).get("ZKTimeOut", "");
+        String udpPort = 
+        NbPreferences.forModule(ClockinMachinesPanel.class).get("ZKUDPPort", "");
+    
+    
+    
     public TAClockinTopComponent() {
         initComponents();
         setName(Bundle.CTL_TAClockinTopComponent());
@@ -62,19 +84,16 @@ public final class TAClockinTopComponent extends TopComponent implements Explore
         ov.addPropertyColumn("clockinID", "Clockin ID");
         ov.addPropertyColumn("clockinTime", "Date/Time");
         ov.addPropertyColumn("clockinType","Checkin/Out");
-        associateLookup(ExplorerUtils.createLookup(em, getActionMap()));
+        associateLookup(new ProxyLookup(ExplorerUtils.createLookup(em, getActionMap()),lkp));
         
-        //Get Options for the applications local options
-        String comPort = 
-        NbPreferences.forModule(ClockinMachinesPanel.class).get("ZKComPort","");
-        String soapPort = 
-        NbPreferences.forModule(ClockinMachinesPanel.class).get("ZKSoapPort", "");
-        String ipAddress = 
-        NbPreferences.forModule(ClockinMachinesPanel.class).get("ZKIPAddress","");
-        String timeOut = 
-        NbPreferences.forModule(ClockinMachinesPanel.class).get("ZKTimeOut", "");
-        String udpPort = 
-        NbPreferences.forModule(ClockinMachinesPanel.class).get("ZKUDPPort", "");
+        enableDownload = new CapDownloadable() {
+            @Override
+            public void download() {
+                downloadData();
+            }
+        };
+        
+        content.add(enableDownload);
         
         
         
@@ -82,26 +101,16 @@ public final class TAClockinTopComponent extends TopComponent implements Explore
         
         map.put("ip", ipAddress);
         map.put("com_key", 0);
-        ZKSoapLib stub = new ZKSoapLib(new ZKOptions(map));
-        getActionMap().put("downloadAction", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try{
-                lblDeviceTime.setText("Device Time: "+stub.getDeviceTime());
-                UtilZKClockin.loadClockin(stub.getAttendanceLogs());
-                }catch(Exception ex){
-                    StatusDisplayer.getDefault().setStatusText(ex.getLocalizedMessage());
-                }
-            }
-        });
         
-        getActionMap().put("uploadAction", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                lblDeviceTime.setText("Device Time: "+stub.getDeviceTime());
-                StatusDisplayer.getDefault().setStatusText("Nothing To Upload, Download First");
-            }
-        });
+        
+        
+//        getActionMap().put("uploadAction", new AbstractAction() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                lblDeviceTime.setText("Device Time: "+stub.getDeviceTime());
+//                StatusDisplayer.getDefault().setStatusText("Nothing To Upload, Download First");
+//            }
+//        });
 
     }
 
@@ -191,5 +200,15 @@ public final class TAClockinTopComponent extends TopComponent implements Explore
     @Override
     public ExplorerManager getExplorerManager() {
         return em;
+    }
+    
+    void downloadData(){
+        ZKSoapLib stub = new ZKSoapLib(new ZKOptions(map));
+        try{
+            lblDeviceTime.setText("Device Time: "+stub.getDeviceTime());
+            UtilZKClockin.loadClockin(stub.getAttendanceLogs());
+        }catch(Exception ex){
+            StatusDisplayer.getDefault().setStatusText(ex.getLocalizedMessage());
+        }
     }
 }

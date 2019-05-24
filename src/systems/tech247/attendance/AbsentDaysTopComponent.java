@@ -45,11 +45,11 @@ import systems.tech247.util.NotifyUtil;
 )
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "Window", id = "systems.tech247.attendance.AbsentDaysComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
-@TopComponent.OpenActionRegistration(
-        displayName = "#CTL_AbsentDaysAction",
-        preferredID = "AbsentDaysTopComponent"
-)
+//@ActionReference(path = "Menu/Window" /*, position = 333 */)
+//@TopComponent.OpenActionRegistration(
+//        displayName = "#CTL_AbsentDaysAction",
+//        preferredID = "AbsentDaysTopComponent"
+//)
 @Messages({
     "CTL_AbsentDaysAction=Absent Days",
     "CTL_AbsentDaysTopComponent=Abent Days",

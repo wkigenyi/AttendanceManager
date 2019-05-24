@@ -31,6 +31,20 @@ class Bundle {
         return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_DepartmentAttendanceTopComponent");
     }
     /**
+     * @return <i>Monthly Attendance Summary Report</i>
+     * @see MonthlyAttendanceSummaryTopComponent
+     */
+    static String CTL_MonthlyAttendanceSummaryAction() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_MonthlyAttendanceSummaryAction");
+    }
+    /**
+     * @return <i>Monthly Attendance Summary Report</i>
+     * @see MonthlyAttendanceSummaryTopComponent
+     */
+    static String CTL_MonthlyAttendanceSummaryTopComponent() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "CTL_MonthlyAttendanceSummaryTopComponent");
+    }
+    /**
      * @return <i>New Shift</i>
      * @see ShiftEditorTopComponent
      */
@@ -92,6 +106,13 @@ class Bundle {
      */
     static String HINT_DepartmentAttendanceTopComponent() {
         return org.openide.util.NbBundle.getMessage(Bundle.class, "HINT_DepartmentAttendanceTopComponent");
+    }
+    /**
+     * @return 
+     * @see MonthlyAttendanceSummaryTopComponent
+     */
+    static String HINT_MonthlyAttendanceSummaryTopComponent() {
+        return org.openide.util.NbBundle.getMessage(Bundle.class, "HINT_MonthlyAttendanceSummaryTopComponent");
     }
     /**
      * @return <i>Shift Editor</i>

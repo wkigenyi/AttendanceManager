@@ -8,16 +8,17 @@ package systems.tech247.attendance;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import javax.swing.JSpinner;
 import javax.swing.JTable;
-import javax.swing.SpinnerDateModel;
-import javax.swing.SpinnerModel;
+import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
+import net.sf.dynamicreports.report.exception.DRException;
+import net.sf.jasperreports.engine.JRDataSource;
+import org.netbeans.api.progress.ProgressHandle;
+import org.netbeans.api.progress.ProgressHandleFactory;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.explorer.ExplorerManager;
@@ -26,12 +27,23 @@ import org.openide.explorer.view.OutlineView;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
+import org.openide.util.Exceptions;
+import org.openide.util.Lookup;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
-import systems.tech247.clockinutil.FactoryAttendanceWithComment;
+import org.openide.util.RequestProcessor;
+import org.openide.util.lookup.AbstractLookup;
+import org.openide.util.lookup.InstanceContent;
+import org.openide.util.lookup.ProxyLookup;
+import systems.tech247.clockinutil.UtilZKClockin;
+import systems.tech247.dbaccess.DataAccess;
 import systems.tech247.hr.Employees;
 import systems.tech247.hr.VwPtmAttendanceWithComment;
 import systems.tech247.shiftschedule.CustomOutlineCellRenderer;
+import systems.tech247.tareports.ReportAttendanceWithComment;
+import systems.tech247.util.CapDownloadable;
+import systems.tech247.util.CapPreview;
+import systems.tech247.util.CapPrint;
 
 /**
  * Top component which displays something.
@@ -62,9 +74,19 @@ public final class AttendanceRegisterTopComponent extends TopComponent implement
     Calendar calendar = Calendar.getInstance();
     ExplorerManager em = new ExplorerManager();
     Employees emp;
-    JSpinner spinner;
-    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-    
+    //JSpinner spinner;
+    InstanceContent content = new InstanceContent();
+    Lookup lkp = new AbstractLookup(content);
+    //JSpinner spinner = Calendar.getInstance();
+    Calendar cfrom = Calendar.getInstance();
+    Calendar cto = Calendar.getInstance();
+    Date from;
+    Date to;
+    JRDataSource data;
+    Boolean quer = true;
+    QueryAttendance query;
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+    String sql;
     public AttendanceRegisterTopComponent(){
         this(null);
     }
@@ -73,8 +95,11 @@ public final class AttendanceRegisterTopComponent extends TopComponent implement
         initComponents();
         setName(Bundle.CTL_AttendanceRegisterTopComponent()+" ->" +emp.getSurName()+" "+emp.getOtherNames());
         setToolTipText(Bundle.HINT_AttendanceRegisterTopComponent());
-        associateLookup(ExplorerUtils.createLookup(em, getActionMap()));
+       
+        associateLookup(new ProxyLookup(ExplorerUtils.createLookup(em, getActionMap()),lkp));
         this.emp = emp;
+        
+        sql = "SELECT * FROM vwPtmAttendanceWithComment where EmployeeID = "+emp.getEmployeeID()+" AND shiftdate >= ? AND ShiftDate <=? ORDER BY ShiftDate DESC";
         OutlineView ov = new OutlineView("Month Day");
         ov.getOutline().setRootVisible(false);
         ov.addPropertyColumn("clockin", "Time IN");
@@ -114,22 +139,134 @@ public final class AttendanceRegisterTopComponent extends TopComponent implement
                 return cell;
             }
                     
+            });
+        
+        Date now = new Date();
+        to = new Date(sdf.format(now));
+        cto.setTime(to);
+        cto.add(Calendar.DAY_OF_MONTH, -1);
+        cfrom.setTime(to);
+        cfrom.add(Calendar.MONTH, -1);
+        cfrom.add(Calendar.DAY_OF_MONTH, 1);
+
+        from = cfrom.getTime();
+        jdcFrom.setDate(from);
+
+        to = cto.getTime();
+        
+        jdcTo.setDate(to);
+        jdcFrom.setMaxSelectableDate(to);
+        
+        jdcTo.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if(evt.getSource()==jdcTo && evt.getPropertyName()=="date"){
+                    
+                    to = DataAccess.cleanDate(jdcTo.getDate());
+                    jdcFrom.setMaxSelectableDate(to);
+                    
+                }
+            }
+        });
+        
+        
+        
+        jdcFrom.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if(evt.getSource()==jdcFrom && evt.getPropertyName()=="date"){
+                    
+                    from = DataAccess.cleanDate(jdcFrom.getDate());
+                    
+                    jdcTo.setMinSelectableDate(from);
+                    
+                    
+                }
+            }
+        });
+        
+                content.add(new CapDownloadable() {
+            @Override
+            public void download() {
+                // TODO: Download the data and show in the view
+                load();
+            }
+        });
+        
+        
+        content.add((CapPrint) () -> {
+            //Object result = DialogDisplayer.getDefault().notify(new NotifyDescriptor(tcDepartments, "Select A Department", NotifyDescriptor.OK_CANCEL_OPTION, NotifyDescriptor.PLAIN_MESSAGE, null, null));
+            //if(result == NotifyDescriptor.OK_OPTION){
+                ProgressHandle ph = ProgressHandleFactory.createHandle("Generating Report, please wait..");
+            ph.start();
+                RequestProcessor.getDefault().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ph.progress("Getting The Data..");
+                            //String sql = "SELECT * FROM vwPtmAttendanceWithComment where EmployeeID = "+e.getEmployeeID()+" AND shiftdate >= ? AND ShiftDate <=? ORDER BY ShiftDate DESC";
+                            data = UtilZKClockin.generateAttendanceData(sql, from, to);
+                        
+                        
+                        ph.progress("Compiling The Report..");
+                        JasperReportBuilder report = new ReportAttendanceWithComment(data,from, to,quer).getReport();
+                try {
+                    report.print();
+                    ph.progress("Done.");
+                    ph.finish();
+
+                } catch (DRException ex) {
+                    Exceptions.printStackTrace(ex);
+                }
+                    }
                 });
+                
+           // }
+            
+        });
+        content.add((CapPreview) () -> {
+            //Object result = DialogDisplayer.getDefault().notify(new NotifyDescriptor(tcDepartments, "Select A Department", NotifyDescriptor.OK_CANCEL_OPTION, NotifyDescriptor.PLAIN_MESSAGE, null, null));
+            //if(result == NotifyDescriptor.OK_OPTION){
+            ProgressHandle ph = ProgressHandleFactory.createHandle("Generating Report, please wait..");
+            ph.start();
+                RequestProcessor.getDefault().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ph.progress("Getting The Data..");
+                        
+                            data = UtilZKClockin.generateAttendanceData(sql, from, to);
+                        
+                        
+                        ph.progress("Compiling The Report..");
+                        JasperReportBuilder report = new ReportAttendanceWithComment(data, from, to,quer).getReport();
+                try {
+                    report.show(false);
+                    ph.progress("Done.");
+                    ph.finish();
+
+                } catch (DRException ex) {
+                    Exceptions.printStackTrace(ex);
+                }
+                    }
+                });
+                
+           // }
+        });
         
         
         
-        jpMonthHolder.setLayout(new BorderLayout());
+        
+        //jpMonthHolder.setLayout(new BorderLayout());
         //Add the month/year spinner
-        Date initDate = calendar.getTime();
-        calendar.add(Calendar.YEAR, -5);
-        Date earliestDate = calendar.getTime();
-        calendar.add(Calendar.YEAR, 10);
-        Date latestDate =  calendar.getTime();
-        SpinnerModel dateModel = new SpinnerDateModel(initDate, earliestDate, latestDate, Calendar.MONTH);
-        spinner = addLabeledSpinner(jpMonthHolder, dateModel);
-        spinner.setEditor(new JSpinner.DateEditor(spinner, "MMMMM/yyyy"));
+        //Date initDate = calendar.getTime();
+        //calendar.add(Calendar.YEAR, -5);
+        //Date earliestDate = calendar.getTime();
+        //calendar.add(Calendar.YEAR, 10);
+        //Date latestDate =  calendar.getTime();
+        //SpinnerModel dateModel = new SpinnerDateModel(initDate, earliestDate, latestDate, Calendar.MONTH);
+        //spinner = addLabeledSpinner(jpMonthHolder, dateModel);
+        //spinner.setEditor(new JSpinner.DateEditor(spinner, "MMMMM/yyyy"));
         
-        spinner.addPropertyChangeListener(new PropertyChangeListener() {
+        /*spinner.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 
@@ -150,7 +287,7 @@ public final class AttendanceRegisterTopComponent extends TopComponent implement
                 
                 
             }
-        });
+        });*/
         
 
     }
@@ -163,7 +300,6 @@ public final class AttendanceRegisterTopComponent extends TopComponent implement
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jpMonthHolder = new javax.swing.JPanel();
         jpView = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jtLeave = new javax.swing.JTextField();
@@ -173,19 +309,10 @@ public final class AttendanceRegisterTopComponent extends TopComponent implement
         jtHoliday = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jtWeeklyOff = new javax.swing.JTextField();
-
-        jpMonthHolder.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        javax.swing.GroupLayout jpMonthHolderLayout = new javax.swing.GroupLayout(jpMonthHolder);
-        jpMonthHolder.setLayout(jpMonthHolderLayout);
-        jpMonthHolderLayout.setHorizontalGroup(
-            jpMonthHolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 152, Short.MAX_VALUE)
-        );
-        jpMonthHolderLayout.setVerticalGroup(
-            jpMonthHolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 18, Short.MAX_VALUE)
-        );
+        jdcFrom = new com.toedter.calendar.JDateChooser();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jdcTo = new com.toedter.calendar.JDateChooser();
 
         jpView.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -197,7 +324,7 @@ public final class AttendanceRegisterTopComponent extends TopComponent implement
         );
         jpViewLayout.setVerticalGroup(
             jpViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 246, Short.MAX_VALUE)
+            .addGap(0, 248, Short.MAX_VALUE)
         );
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(AttendanceRegisterTopComponent.class, "AttendanceRegisterTopComponent.jLabel1.text")); // NOI18N
@@ -220,6 +347,10 @@ public final class AttendanceRegisterTopComponent extends TopComponent implement
         jtWeeklyOff.setEditable(false);
         jtWeeklyOff.setText(org.openide.util.NbBundle.getMessage(AttendanceRegisterTopComponent.class, "AttendanceRegisterTopComponent.jtWeeklyOff.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(AttendanceRegisterTopComponent.class, "AttendanceRegisterTopComponent.jLabel5.text_1")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(AttendanceRegisterTopComponent.class, "AttendanceRegisterTopComponent.jLabel6.text_1")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -227,6 +358,7 @@ public final class AttendanceRegisterTopComponent extends TopComponent implement
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jpView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -243,16 +375,22 @@ public final class AttendanceRegisterTopComponent extends TopComponent implement
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jtWeeklyOff, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jpMonthHolder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jpView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(57, 57, 57)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jdcFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jdcTo, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
                         .addComponent(jtLeave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -261,8 +399,11 @@ public final class AttendanceRegisterTopComponent extends TopComponent implement
                         .addComponent(jLabel3)
                         .addComponent(jtHoliday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel4)
-                        .addComponent(jtWeeklyOff, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jpMonthHolder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jtWeeklyOff, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel5))
+                    .addComponent(jdcFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(jdcTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -274,7 +415,10 @@ public final class AttendanceRegisterTopComponent extends TopComponent implement
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JPanel jpMonthHolder;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private com.toedter.calendar.JDateChooser jdcFrom;
+    private com.toedter.calendar.JDateChooser jdcTo;
     private javax.swing.JPanel jpView;
     private javax.swing.JTextField jtCompensation;
     private javax.swing.JTextField jtHoliday;
@@ -306,20 +450,6 @@ public final class AttendanceRegisterTopComponent extends TopComponent implement
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
-    
-
-    
-    static protected JSpinner addLabeledSpinner(Container c,
-                                                
-                                                SpinnerModel model) {
-
- 
-        JSpinner spinner = new JSpinner(model);
-   
-        c.add(spinner);
- 
-        return spinner;
-    }
 
     @Override
     public ExplorerManager getExplorerManager() {
@@ -339,6 +469,24 @@ public final class AttendanceRegisterTopComponent extends TopComponent implement
                 cell.setBackground(Color.PINK);
             }
         }
+        
+        
+    }
+    
+    void load(){
+
+        
+        String sql  = "SELECT * FROM vwPtmAttendanceWithComment where EmployeeID = "+emp.getEmployeeID()+" AND shiftdate >= ? AND ShiftDate <=? ORDER BY ShiftDate DESC";
+        
+        RequestProcessor.getDefault().post(() -> {
+            query = new QueryAttendance(sql, from, to);
+            makeBusy(true);
+            em.setRootContext(new AbstractNode(Children.create(new FactoryAttendanceList(query,from,to), true)));
+            makeBusy(false);
+        });
+        
+        //StatusDisplayer.getDefault().setStatusText(sdf.format(to));
+                
         
         
     }

@@ -14,9 +14,10 @@ import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
+import org.netbeans.api.progress.ProgressHandle;
+import org.netbeans.api.progress.ProgressHandleFactory;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
-import org.openide.awt.ActionReference;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.ExplorerUtils;
 import org.openide.explorer.view.OutlineView;
@@ -25,9 +26,14 @@ import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.util.RequestProcessor;
+import org.openide.util.lookup.AbstractLookup;
+import org.openide.util.lookup.InstanceContent;
+import org.openide.util.lookup.ProxyLookup;
 import systems.tech247.clockinutil.FactoryClockinInfo;
 import systems.tech247.hr.Employees;
 import systems.tech247.shiftschedule.CustomOutlineCellRenderer;
+import systems.tech247.util.CapCreatable;
 import systems.tech247.util.NotifyUtil;
 
 /**
@@ -38,7 +44,7 @@ import systems.tech247.util.NotifyUtil;
         autostore = false
 )
 @TopComponent.Description(
-        preferredID = "ShiftSTopComponent",
+        preferredID = "ClockinTopComponent",
         //iconBase="SET/PATH/TO/ICON/HERE", 
         persistenceType = TopComponent.PERSISTENCE_NEVER
 )
@@ -55,7 +61,10 @@ import systems.tech247.util.NotifyUtil;
     "HINT_ClockinTopComponent="
 })
 public final class ClockinTopComponent extends TopComponent implements ExplorerManager.Provider {
-    
+
+    InstanceContent content = new InstanceContent();
+    AbstractLookup lkp = new AbstractLookup(content);
+    CapCreatable enableCreate;
     Calendar cFrom = Calendar.getInstance();
     Calendar cTo = Calendar.getInstance();
     ExplorerManager em = new ExplorerManager();
@@ -72,17 +81,14 @@ public final class ClockinTopComponent extends TopComponent implements ExplorerM
         initComponents();
         setName(Bundle.CTL_ClockinTopComponent()+" ->"+emp.getSurName()+" "+emp.getOtherNames());
         setToolTipText(Bundle.HINT_ClockinTopComponent());
-        associateLookup(ExplorerUtils.createLookup(em, getActionMap()));
+        associateLookup(new ProxyLookup(ExplorerUtils.createLookup(em, getActionMap()),lkp));
         this.emp = emp;
         OutlineView ov = new OutlineView("Month Day");
         ov.getOutline().setRootVisible(false);
         
         ov.addPropertyColumn("time", "TIME");
         ov.addPropertyColumn("inout", "IN/OUT");
-        //ov.addPropertyColumn("isHoliday", "Holiday");
-        //ov.addPropertyColumn("isWeeklyOff", "Weekly Off Day");
-        //ov.addPropertyColumn("isCOff", "Compsn Day Off");
-        //ov.addPropertyColumn("isLeave", "On Leave");
+
         ov.addPropertyColumn("sno", "MACHINE Number");
 
         jpView.setLayout(new BorderLayout());
@@ -138,25 +144,22 @@ public final class ClockinTopComponent extends TopComponent implements ExplorerM
             }
         });
         
-        jdcFrom.addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                if(evt.getSource()==jdcFrom && evt.getPropertyName()=="date"){
-                    
-                    cFrom.setTime(jdcFrom.getDate());
-                    cFrom.set(Calendar.HOUR, 0);
-                    cFrom.set(Calendar.MINUTE, 0);
-                    cFrom.set(Calendar.SECOND, 0);
-                    cFrom.set(Calendar.MILLISECOND, 1);
-                    from = cFrom.getTime();
-                    
-                    
-                    
-                    if(cTo.getTimeInMillis()<cFrom.getTimeInMillis()){
-                        NotifyUtil.error("Date Range Error", "The From Date must be before the To Date", false);
-                    }else{
-                        em.setRootContext(new AbstractNode(Children.create(new FactoryClockinInfo(emp, from, to), true)));
-                    }
+        jdcFrom.addPropertyChangeListener((PropertyChangeEvent evt) -> {
+            if(evt.getSource()==jdcFrom && "date".equals(evt.getPropertyName())){
+                
+                cFrom.setTime(jdcFrom.getDate());
+                cFrom.set(Calendar.HOUR, 0);
+                cFrom.set(Calendar.MINUTE, 0);
+                cFrom.set(Calendar.SECOND, 0);
+                cFrom.set(Calendar.MILLISECOND, 1);
+                from = cFrom.getTime();
+                
+                
+                
+                if(cTo.getTimeInMillis()<cFrom.getTimeInMillis()){
+                    NotifyUtil.error("Date Range Error", "The From Date must be before the To Date", false);
+                }else{
+                    em.setRootContext(new AbstractNode(Children.create(new FactoryClockinInfo(emp, from, to), true)));
                 }
             }
         });
@@ -242,7 +245,18 @@ public final class ClockinTopComponent extends TopComponent implements ExplorerM
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
-        em.setRootContext(new AbstractNode(Children.create(new FactoryClockinInfo(emp, from, to), true)));
+        ProgressHandle ph = ProgressHandleFactory.createHandle("Searching For Info");
+        RequestProcessor.getDefault().post(new Runnable() {
+            @Override
+            public void run() {
+                ph.start();
+                em.setRootContext(new AbstractNode(Children.create(new FactoryClockinInfo(emp, from, to), true)));
+                ph.finish();
+            }
+        });
+        
+        enableCreate = this::provideForClockinInsert;
+        content.add(enableCreate);
     }
 
     @Override
@@ -279,6 +293,14 @@ public final class ClockinTopComponent extends TopComponent implements ExplorerM
     @Override
     public ExplorerManager getExplorerManager() {
         return em;
+    }
+    
+    void provideForClockinInsert(){
+        
+        TopComponent tc = new ClockinLogEditorTopComponent(emp);
+        tc.open();
+        tc.requestActive();
+        
     }
     
     

@@ -18,6 +18,7 @@ import net.sf.dynamicreports.report.datasource.DRDataSource;
 import net.sf.jasperreports.engine.JRDataSource;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
+import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.awt.StatusDisplayer;
@@ -34,6 +35,7 @@ import systems.tech247.dbaccess.DataAccess;
 import static systems.tech247.dbaccess.DataAccess.entityManager;
 import systems.tech247.hr.Employees;
 import systems.tech247.hr.OrganizationUnits;
+import systems.tech247.hr.TblPeriods;
 import systems.tech247.hr.VwPtmAttendanceWithComment;
 
 /**
@@ -117,19 +119,15 @@ public class UtilZKClockin {
         departmentAttendance.setRootContext(new AbstractNode(Children.create(new FactoryStoredEmployeeClockin(department, day), true)));
     }
     
-    public static JRDataSource generateAttendanceData(OrganizationUnits dept,Date from, Date to, Boolean quer){
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    public static JRDataSource generateAttendanceData(String sql,Date from, Date to){
+        //SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         final SimpleDateFormat stf = new SimpleDateFormat("HH:mm:ss");
-        String sql;
-        DRDataSource data = new DRDataSource("name","date","timein","timeout","hours","comment");
-        if(quer){
-            sql = "SELECT * FROM vwPtmAttendanceWithComment WHERE deptID = "+dept.getOrganizationUnitID()+" AND ShiftDate>='"+df.format(from)+"' AND ShiftDate<='"+df.format(to)+"'";
-        }else{
-            sql = "SELECT * FROM vwPtmAttendanceWithComment WHERE deptID = "+dept.getOrganizationUnitID()+" AND ShiftDate>='"+df.format(from)+"' AND ShiftDate<='"+df.format(to)+"' AND Comment LIKE 'ABSENT'";
-        }
         
-        List<VwPtmAttendanceWithComment> list = DataAccess.getAttendance(sql);
+        DRDataSource data = new DRDataSource("name","date","timein","timeout","hours","comment");
+        
+        
+        List<VwPtmAttendanceWithComment> list = DataAccess.getAttendance(sql,from,to);
         String checkin = "";
         String checkout = "";
         Double hours = 0.0;
@@ -201,124 +199,97 @@ public class UtilZKClockin {
         return data;
     }
     
+    public static JRDataSource generateScheduleData(List<Employees> listE, List<Date> dates){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+        //ColumnBuilder[] columns = new ColumnBuilder[dates.size()+2];
+        String[] columnNames = new String[dates.size()+2];
+        
+        columnNames[0] = "empname";
+        
+        columnNames[1] = "empcode";
+        
+        for(int i=0; i<dates.size(); i++){
+            String label = sdf.format(dates.get(i));
+            columnNames[i+2] = label;
+        }
+        
+        
+        
+        DRDataSource data = new DRDataSource(columnNames);
+        
+        
+        
+        for(Employees e : listE) {
+            Object[] datas = new Object[dates.size()+2];
+            datas[0] = e.getSurName()+" , "+e.getOtherNames().substring(0, 1);
+            datas[1] = e.getEmpCode();
+            for(int i =0; i<dates.size(); i++){
+                datas[i+2] = "";
+            }
+            data.add(datas);
+        }    
+        //StatusDisplayer.getDefault().setStatusText("Data is ready");
+        return data;
+    }
     
     
     
     
     
-    public static void duplicateShiftSchedule(Date date){
-        NotifyDescriptor nd = new NotifyDescriptor(
-                "Duplicate Previous Shift Schedules?", //Message or component 
-                "Shift Schedules", //Title
-                NotifyDescriptor.YES_NO_OPTION,//Options 
-                NotifyDescriptor.QUESTION_MESSAGE,//Symbol 
-                new Object[]{
-                    
-                    new JButton("Yes, All Employees"){
-            @Override
-            public void addActionListener(ActionListener l) {
-                super.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        // We are at the beginning of the month
-                Runnable task;
+    
+    public static void duplicateShiftSchedule(TblPeriods period,List<Employees> listEmp){
+        Object result = DialogDisplayer.getDefault().notify(new DialogDescriptor("Schedules For Old Employees will be copied\nNew Employees will have new Schedules without weekly off days", "Employee Schedules"));
+        if(result != NotifyDescriptor.CANCEL_OPTION){
+            Runnable task;
                 task = () -> {
                     ProgressHandle ph = ProgressHandleFactory.createHandle("Filling The Schedules");
                     ph.start();
                     //Delete the existing schedules for the month
                     Calendar cal = Calendar.getInstance();
- 
-                    cal.setTime(date);
+                    //cal.setTime(date);
                     cal.set(Calendar.DATE, 0);
                     cal.set(Calendar.HOUR, 12);
                     cal.set(Calendar.MINUTE, 0);
                     cal.set(Calendar.SECOND,0);
                     cal.set(Calendar.MILLISECOND, 0);
-                    
-                    int currentMonthInDB = cal.get(Calendar.MONTH)+1;
-                    int currentYear = cal.get(Calendar.YEAR);
+                    int currentMonthInDB = DataAccess.covertMonthsToInt(period.getPeriodMonth());
+                    int currentYear = period.getPeriodYear();
                     ph.progress("Cleaning The Month,  Deleting existing schedules");
-                    String sql = "DELETE FROM PtmShiftSchedule WHERE year(shiftDate) = "+currentYear+" AND month(ShiftDate)="+currentMonthInDB+"";
-                    Query query = entityManager.createNativeQuery(sql);
-                    entityManager.getTransaction().begin();
-                    query.executeUpdate();
-                    entityManager.getTransaction().commit();
-                    //Get the list of employees that are to be updated
-                    ph.progress("Getting the employees");
-                    List<Employees> employeeList = DataAccess.searchEmployees(
-                            "SELECT e FROM Employees e WHERE e.isDisengaged = 0"
-                    );
-                    
-                    int total = employeeList.size();
+                //For The Specified List, To Avoid Deleting Schedules for those that we do not wa
+                listEmp.forEach((e) -> {
+                    DataAccess.deleteShiftSchedules(period, e.getEmployeeID());
+                });
+                               
+                    int total = listEmp.size();
                     
                     
                     for(int i = 0; i<total; i++){
                         //Reset the date for the new employee
-                        cal.setTime(date);
+                        //cal.setTime(date);
                         cal.set(Calendar.DATE, 1);
                         cal.set(Calendar.HOUR_OF_DAY,0);
                         cal.set(Calendar.MINUTE, 0);
                         cal.set(Calendar.SECOND,0);
                         cal.set(Calendar.MILLISECOND, 0);
-                        
+                        cal.set(Calendar.MONTH, currentMonthInDB-1);
                         
                         
                         //int latestShiftCode = DataAccess.getLatestShiftCode(emp.getEmployeeID());
-                        int month =cal.get(Calendar.MONTH);
-                        int monthV = cal.get(Calendar.MONTH);
+                        int monthOfIntrest =cal.get(Calendar.MONTH);
+                        int movingMonth = cal.get(Calendar.MONTH);
                         int day = 1;
-                        Employees emp = employeeList.get(i);
+                        Employees emp = listEmp.get(i);
                         
-                        while(month==monthV){
-                            ph.progress(i+" / "+total+" Posting for "+emp.getSurName()+" "+emp.getOtherNames()+" Day "+day);
+                        while(monthOfIntrest == movingMonth){
+                            ph.progress(i+" / "+total+" Inserting for "+emp.getSurName()+" "+emp.getOtherNames()+" Day "+day);
                             //String getInsertID = "SELECT MAX(shiftscheduleid) from PtmShiftSchedule";
                             //Query queryID = entityManager.createNativeQuery(getInsertID);
                             //int id = ((BigDecimal)queryID.getSingleResult()).intValue();
                             //int newID = id+1;
-                            String insertQuery = 
-                                    "INSERT INTO [dbo].[PtmShiftSchedule]\n" +
-                                    "           ([CoCode]\n" +//1
-                                    "           ,[EmployeeID]\n" +//2
-                                    "           ,[ShiftDate]\n" +//3
-                                    "           ,[ShiftCode]\n" +//4
-                                    "           ,[DayType]\n" +//5
-                                    "           ,[IsWeekOff]\n" +//6,7
-                                    "           ,[IsCOff]\n" +//8
-                                    "           ,[IsLeave]\n" +//9
-                                    "           ,[IsOT2Shift]\n" +//10
-                                    "           ,[UserID]\n" +//11
-                                    "           ,[EntryDate]\n" +//12
-                                    "           ,[DepartmentCode]\n" +//13
-                                    "           ,[MasterTwoCode])\n" +//null 14
-                                    "     VALUES\n" +
-                                    "           (?,?,?,dbo.ptmfnGetLatestShiftCode(?),?,dbo.ptmfnIsWeekOff(?,?),?,?,?,?,?,?,?)";
-                            
-                            Query queryInsert = entityManager.createNativeQuery(insertQuery);
-                            //queryInsert.setParameter(1, newID);
-                            queryInsert.setParameter(1, 1);
-                            
-                            queryInsert.setParameter(2, emp.getEmployeeID());
-                            
-                            queryInsert.setParameter(3, cal.getTime());
-                            
-                            queryInsert.setParameter(4, emp.getEmployeeID());
-                            
-                            queryInsert.setParameter(6, cal.getTime());
-                            
-                            queryInsert.setParameter(7, emp.getEmployeeID());
-                            
-                            queryInsert.setParameter(8,0);
-                            
-                            //queryInsert.setParameter(10, 0);
-                            queryInsert.setParameter(12, new Date());
-                            
-                            
-                            entityManager.getTransaction().begin();
-                            queryInsert.executeUpdate();
-                            entityManager.getTransaction().commit();
+                            DataAccess.insertShiftSchedule(emp.getEmployeeID(), cal.getTime());
                             //Now go to the next date
                             cal.add(Calendar.DATE, 1);
-                            monthV= cal.get(Calendar.MONTH);
+                            movingMonth = cal.get(Calendar.MONTH);
                             day = day+1;
                             
                         }
@@ -327,27 +298,152 @@ public class UtilZKClockin {
                 };
                 
                 RequestProcessor.getDefault().post(task);
-                    }
-                });
-                
-                
-                
-                
-                
-
-                
-            }
-                        
-                        
-                    },
-                    NotifyDescriptor.CANCEL_OPTION
-                }, 
-                null);
-        
-        DialogDisplayer.getDefault().notify(nd);
-        
-        
+        }
+           
     }
+    
+//    public static void saveShiftSchedule(TblPeriods period){
+//        NotifyDescriptor nd = new NotifyDescriptor(
+//                "Duplicate Previous Shift Schedules?", //Message or component 
+//                "Shift Schedules", //Title
+//                NotifyDescriptor.YES_NO_OPTION,//Options 
+//                NotifyDescriptor.QUESTION_MESSAGE,//Symbol 
+//                new Object[]{
+//                    
+//                    new JButton("Yes, All Employees"){
+//            @Override
+//            public void addActionListener(ActionListener l) {
+//                super.addActionListener(new ActionListener() {
+//                    @Override
+//                    public void actionPerformed(ActionEvent e) {
+//                        // We are at the beginning of the month
+//                Runnable task;
+//                task = () -> {
+//                    ProgressHandle ph = ProgressHandleFactory.createHandle("Filling The Schedules");
+//                    ph.start();
+//                    //Delete the existing schedules for the month
+//                    Calendar cal = Calendar.getInstance();
+// 
+//                    //cal.setTime(date);
+//                    cal.set(Calendar.DATE, 0);
+//                    cal.set(Calendar.HOUR, 12);
+//                    cal.set(Calendar.MINUTE, 0);
+//                    cal.set(Calendar.SECOND,0);
+//                    cal.set(Calendar.MILLISECOND, 0);
+//                    
+//                    int currentMonthInDB = DataAccess.covertMonthsToInt(period.getPeriodMonth());
+//                    int currentYear = cal.get(Calendar.YEAR);
+//                    ph.progress("Cleaning The Month,  Deleting existing schedules");
+//                    String sql = "DELETE FROM PtmShiftSchedule WHERE year(shiftDate) = "+currentYear+" AND month(ShiftDate)="+currentMonthInDB+"";
+//                    Query query = entityManager.createNativeQuery(sql);
+//                    entityManager.getTransaction().begin();
+//                    query.executeUpdate();
+//                    entityManager.getTransaction().commit();
+//                    //Get the list of employees that are to be updated
+//                    ph.progress("Getting the employees");
+//                    List<Employees> employeeList = DataAccess.searchEmployees(
+//                            "SELECT e FROM Employees e WHERE e.isDisengaged = 0"
+//                    );
+//                    
+//                    int total = employeeList.size();
+//                    
+//                    
+//                    for(int i = 0; i<total; i++){
+//                        //Reset the date for the new employee
+//                        //cal.setTime(date);
+//                        cal.set(Calendar.DATE, 1);
+//                        cal.set(Calendar.HOUR_OF_DAY,0);
+//                        cal.set(Calendar.MINUTE, 0);
+//                        cal.set(Calendar.SECOND,0);
+//                        cal.set(Calendar.MILLISECOND, 0);
+//                        
+//                        
+//                        
+//                        //int latestShiftCode = DataAccess.getLatestShiftCode(emp.getEmployeeID());
+//                        int month =cal.get(Calendar.MONTH);
+//                        int monthV = cal.get(Calendar.MONTH);
+//                        int day = 1;
+//                        Employees emp = employeeList.get(i);
+//                        
+//                        while(month==monthV){
+//                            ph.progress(i+" / "+total+" Posting for "+emp.getSurName()+" "+emp.getOtherNames()+" Day "+day);
+//                            //String getInsertID = "SELECT MAX(shiftscheduleid) from PtmShiftSchedule";
+//                            //Query queryID = entityManager.createNativeQuery(getInsertID);
+//                            //int id = ((BigDecimal)queryID.getSingleResult()).intValue();
+//                            //int newID = id+1;
+//                            String insertQuery = 
+//                                    "INSERT INTO [dbo].[PtmShiftSchedule]\n" +
+//                                    "           ([CoCode]\n" +//1
+//                                    "           ,[EmployeeID]\n" +//2
+//                                    "           ,[ShiftDate]\n" +//3
+//                                    "           ,[ShiftCode]\n" +//4
+//                                    "           ,[DayType]\n" +//5
+//                                    "           ,[IsWeekOff]\n" +//6,7
+//                                    "           ,[IsCOff]\n" +//8
+//                                    "           ,[IsLeave]\n" +//9
+//                                    "           ,[IsOT2Shift]\n" +//10
+//                                    "           ,[UserID]\n" +//11
+//                                    "           ,[EntryDate]\n" +//12
+//                                    "           ,[DepartmentCode]\n" +//13
+//                                    "           ,[MasterTwoCode])\n" +//null 14
+//                                    "     VALUES\n" +
+//                                    "           (?,?,?,dbo.ptmfnGetLatestShiftCode(?),?,dbo.ptmfnIsWeekOff(?,?),?,?,?,?,?,?,?)";
+//                            
+//                            Query queryInsert = entityManager.createNativeQuery(insertQuery);
+//                            //queryInsert.setParameter(1, newID);
+//                            queryInsert.setParameter(1, 1);
+//                            
+//                            queryInsert.setParameter(2, emp.getEmployeeID());
+//                            
+//                            queryInsert.setParameter(3, cal.getTime());
+//                            
+//                            queryInsert.setParameter(4, emp.getEmployeeID());
+//                            
+//                            queryInsert.setParameter(6, cal.getTime());
+//                            
+//                            queryInsert.setParameter(7, emp.getEmployeeID());
+//                            
+//                            queryInsert.setParameter(8,0);
+//                            
+//                            //queryInsert.setParameter(10, 0);
+//                            queryInsert.setParameter(12, new Date());
+//                            
+//                            
+//                            entityManager.getTransaction().begin();
+//                            queryInsert.executeUpdate();
+//                            entityManager.getTransaction().commit();
+//                            //Now go to the next date
+//                            cal.add(Calendar.DATE, 1);
+//                            monthV= cal.get(Calendar.MONTH);
+//                            day = day+1;
+//                            
+//                        }
+//                    }
+//                    ph.finish();
+//                };
+//                
+//                RequestProcessor.getDefault().post(task);
+//                    }
+//                });
+//                
+//                
+//                
+//                
+//                
+//
+//                
+//            }
+//                        
+//                        
+//                    },
+//                    NotifyDescriptor.CANCEL_OPTION
+//                }, 
+//                null);
+//        
+//        DialogDisplayer.getDefault().notify(nd);
+//        
+//        
+//    }
     
     
     

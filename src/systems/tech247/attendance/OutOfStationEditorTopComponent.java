@@ -17,7 +17,6 @@ import javax.persistence.Query;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.netbeans.spi.actions.AbstractSavable;
 import org.openide.awt.ActionID;
-import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 import org.openide.util.lookup.InstanceContent;
@@ -78,7 +77,7 @@ public final class OutOfStationEditorTopComponent extends TopComponent {
         initComponents();
         setName(Bundle.CTL_OutOfStationEditorTopComponent());
         setToolTipText(Bundle.HINT_OutOfStationEditorTopComponent());
-        
+        this.emp = emp;
         this.visit = visit;
         try{
             updateable = entityManager.find(PtmOutstationVisits.class, visit.getOutstationID());

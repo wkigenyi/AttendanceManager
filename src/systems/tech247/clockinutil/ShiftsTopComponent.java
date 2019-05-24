@@ -64,7 +64,7 @@ public final class ShiftsTopComponent extends TopComponent implements ExplorerMa
             tc.requestActive();
         });
         setLayout(new BorderLayout());
-        OutlineView ov = new OutlineView();
+        OutlineView ov = new OutlineView("Shifts");
         
         add(ov);
         
@@ -73,7 +73,11 @@ public final class ShiftsTopComponent extends TopComponent implements ExplorerMa
             ov.addPropertyColumn("start", "Starts");
             ov.addPropertyColumn("late", "Late Limit");
             ov.addPropertyColumn("end", "Ends");
+            ov.addPropertyColumn("default", "DEFAULT SHIFT");
+            ov.addPropertyColumn("night", "NIGHT EXISTS");
         }
+        
+        em.setRootContext(new AbstractNode(Children.create(new FactoryShifts(), true)));
         
         ov.getOutline().setRootVisible(false);
         
@@ -104,7 +108,7 @@ public final class ShiftsTopComponent extends TopComponent implements ExplorerMa
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
-        em.setRootContext(new AbstractNode(Children.create(new FactoryShifts(), true)));
+        
     }
 
     @Override

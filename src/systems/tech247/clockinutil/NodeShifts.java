@@ -5,12 +5,9 @@
  */
 package systems.tech247.clockinutil;
 
-import java.awt.event.ActionEvent;
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node.Property;
@@ -19,7 +16,6 @@ import org.openide.nodes.Sheet;
 import org.openide.nodes.Sheet.Set;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
-import org.openide.util.lookup.Lookups;
 import org.openide.windows.TopComponent;
 import systems.tech247.hr.PtmShifts;
 import systems.tech247.util.CapEditable;
@@ -119,6 +115,33 @@ public class NodeShifts extends AbstractNode{
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
         };
+        Property def = new PropertySupport("default", Boolean.class, "DEFAULT", "DEFAULT", true, false) {
+            @Override
+            public Object getValue() throws IllegalAccessException, InvocationTargetException {
+                return shift.getDefaultShift();
+            }
+            
+            @Override
+            public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+        
+        Property night = new PropertySupport("night", Boolean.class, "NIGHT", "NIGHT", true, false) {
+            @Override
+            public Object getValue() throws IllegalAccessException, InvocationTargetException {
+                return shift.getNightExists();
+            }
+            
+            @Override
+            public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+        
+        
+        set.put(night);
+        set.put(def);
         set.put(end);
         set.put(late);
         set.put(start);

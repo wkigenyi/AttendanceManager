@@ -47,7 +47,12 @@ public final class TASetupTopComponent extends TopComponent implements ExplorerM
         initComponents();
         setName(Bundle.CTL_TASetupTopComponent());
         setToolTipText(Bundle.HINT_TASetupTopComponent());
+        putClientProperty(TopComponent.PROP_UNDOCKING_DISABLED, Boolean.TRUE);
         putClientProperty(TopComponent.PROP_CLOSING_DISABLED, Boolean.TRUE);
+        putClientProperty(TopComponent.PROP_DND_COPY_DISABLED, Boolean.TRUE);
+        putClientProperty(TopComponent.PROP_DRAGGING_DISABLED, Boolean.TRUE);
+        putClientProperty(TopComponent.PROP_MAXIMIZATION_DISABLED, Boolean.TRUE);
+        putClientProperty(TopComponent.PROP_SLIDING_DISABLED, Boolean.TRUE);
         BeanTreeView btv = new BeanTreeView();
         setLayout(new BorderLayout());
         btv.setRootVisible(false);

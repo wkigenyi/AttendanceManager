@@ -8,6 +8,7 @@ package systems.tech247.attendance;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
@@ -29,7 +30,7 @@ public class QueryAttendance implements Lookup.Provider {
     
     private List<VwPtmAttendanceWithComment> list;
     
-    public QueryAttendance(final String sql){
+    public QueryAttendance(final String sql,final Date from,final Date to){
         
         list = new ArrayList<>();
         // create an InstanceContent to hold capabilities
@@ -42,7 +43,7 @@ public class QueryAttendance implements Lookup.Provider {
             ProgressHandle ph = ProgressHandleFactory.createHandle("Organising Attendance Details, This is a length operation...");
             ph.start();
             
-            Collection<VwPtmAttendanceWithComment> list1 = DataAccess.getAttendance(sql);
+            Collection<VwPtmAttendanceWithComment> list1 = DataAccess.getAttendance(sql,from,to);
             list1.forEach((e) -> {
                 getList().add(e);
             });

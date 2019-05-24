@@ -150,6 +150,20 @@ public class NodeAttendanceSummary extends AbstractNode {
         
         set.put(absentDays);
         
+        Property attended = new PropertySupport("attend", String.class, PROP_DISPLAY_NAME, PROP_SHORT_DESCRIPTION, true, false) {
+            @Override
+            public Object getValue() throws IllegalAccessException, InvocationTargetException {
+                return   att.getDaysinPeriods() - att.getAbsentDays();
+            }
+            
+            @Override
+            public void setValue(Object val) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+        
+        set.put(attended);
+        
         Property basic = new PropertySupport("basic", String.class, PROP_DISPLAY_NAME, PROP_SHORT_DESCRIPTION, true, false) {
             @Override
             public Object getValue() throws IllegalAccessException, InvocationTargetException {

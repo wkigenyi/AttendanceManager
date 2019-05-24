@@ -5,8 +5,6 @@
  */
 package systems.tech247.tareports;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,7 +22,6 @@ import net.sf.dynamicreports.report.exception.DRException;
 import net.sf.jasperreports.engine.JRDataSource;
 import org.openide.awt.StatusDisplayer;
 import systems.tech247.dbaccess.DataAccess;
-import systems.tech247.hr.OrganizationUnits;
 import systems.tech247.reports.ReportTemplate;
 
 /**
@@ -40,11 +37,11 @@ public class ReportAttendanceWithComment {
     Date from;
     Date to;
     TextColumnBuilder groupby;
-    OrganizationUnits dept;
+    
     String title;
     SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
-    public ReportAttendanceWithComment(JRDataSource data,OrganizationUnits dept,Date from, Date to,Boolean quer){
-        this.dept = dept;
+    public ReportAttendanceWithComment(JRDataSource data,Date from, Date to,Boolean quer){
+        
         this.attData = data;
         this.from = from;
         this.to = to;
@@ -87,7 +84,7 @@ public class ReportAttendanceWithComment {
                                     DynamicReports.col.column("TIME IN","timein",DynamicReports.type.stringType()).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER),
                                     DynamicReports.col.column("TIME OUT","timeout",DynamicReports.type.stringType()).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER),
                                     DynamicReports.col.column("HOURS WORKED","hours",DynamicReports.type.doubleType()).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER),
-                                    DynamicReports.col.column("COMMENT","comment",DynamicReports.type.stringType()).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER)
+                                    DynamicReports.col.column("COMMENT","comment",DynamicReports.type.stringType()).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER).setFixedColumns(20)
                             )
                                     
                                     
@@ -124,7 +121,7 @@ public class ReportAttendanceWithComment {
 			report.setTemplate(AttReportTemplate.reportTemplate);
                         try{
                             report.title(
-                                    AttReportTemplate.createTitleComponent(DataAccess.getDefaultCompany(),sdf.format(from),sdf.format(to),dept.getOrganizationUnitName(),title)
+                                    AttReportTemplate.createTitleComponent(DataAccess.getDefaultCompany(),sdf.format(from),sdf.format(to),title)
                                   
                             );
                         }catch(IOException ex){

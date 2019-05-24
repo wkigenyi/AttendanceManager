@@ -75,7 +75,7 @@ public class ZKSoapLib {
             SOAPElement argKey = comKey.addChildElement(arg);
             QName pin = new QName("PIN");
             SOAPElement pinKey = argKey.addChildElement(pin);
-            //pinKey.addTextNode("ALL");
+            pinKey.addTextNode("1");
                 
             System.out.println();
             soapMessage.writeTo(System.out);

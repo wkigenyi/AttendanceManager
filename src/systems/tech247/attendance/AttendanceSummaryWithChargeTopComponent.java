@@ -31,6 +31,7 @@ import org.openide.explorer.view.OutlineView;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.util.Exceptions;
+import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
@@ -176,9 +177,10 @@ public final class AttendanceSummaryWithChargeTopComponent extends TopComponent 
         ov.addPropertyColumn("position", "Position");
         ov.addPropertyColumn("joined", "Joined");
         ov.addPropertyColumn("days", "Period Days");
+        ov.addPropertyColumn("attend", "Attended Days");
         ov.addPropertyColumn("absent", "Absent Days");
-        ov.addPropertyColumn("basic", "Basic Pay");
-        ov.addPropertyColumn("charge", "Absent Amount");
+        //ov.addPropertyColumn("basic", "Basic Pay");
+        //ov.addPropertyColumn("charge", "Absent Amount");
         //ov.addPropertyColumn("isCOff", "Compsn Day Off");
         //ov.addPropertyColumn("isLeave", "On Leave");
         
@@ -197,7 +199,7 @@ public final class AttendanceSummaryWithChargeTopComponent extends TopComponent 
         cfrom.set(Calendar.MINUTE, 0);
         cfrom.set(Calendar.SECOND, 0);
         cfrom.set(Calendar.MILLISECOND, 0);
-        cfrom.add(Calendar.DAY_OF_MONTH, -1);
+        //cfrom.add(Calendar.DAY_OF_MONTH, -1);
         from = cfrom.getTime();
         
         jdcFrom.setDate(from);
@@ -206,6 +208,7 @@ public final class AttendanceSummaryWithChargeTopComponent extends TopComponent 
         cto.set(Calendar.HOUR, 23);
         cto.set(Calendar.MINUTE, 59);
         cto.set(Calendar.SECOND, 59);
+        cto.add(Calendar.DAY_OF_MONTH, -1);
         cto.set(Calendar.MILLISECOND, 0);
         to = cto.getTime();
         
@@ -421,7 +424,7 @@ public final class AttendanceSummaryWithChargeTopComponent extends TopComponent 
 "CategoryDetails as category,\n" +
 "DateOfEmployment as joined,\n" +
 "COUNT(*) AS daysInPeriod,\n" +
-"SUM(CASE Comment WHEN 'ABSENT' THEN 1 ELSE 0 END) AS absentDays,\n" +
+"SUM(CASE WHEN COMMENT LIKE '%ABSENT%' THEN 1 ELSE 0 END) AS absentDays,\n" +
 "dbo.prlfnGetBasicPay(EmployeeID) AS basicPay\n" +
 "FROM vwPtmAttendanceWithComment \n" +
 "WHERE SHiftdate >='"+datefrom+"' AND SHiftdate <='"+dateto+"'\n" +
@@ -495,32 +498,50 @@ public final class AttendanceSummaryWithChargeTopComponent extends TopComponent 
         Currencies currency = DataAccess.getBaseCurrency();
         DialogDisplayer.getDefault().notify(new DialogDescriptor(tc,"Select A Payroll Code"));
         
-        Object result = DialogDisplayer.getDefault().notify(new NotifyDescriptor.Confirmation("Confirm Attendace & Leave Info is accurate before proceeding.\n\nProceed?", "Confirm"));
-        if(result == NotifyDescriptor.YES_OPTION){
-            if(null != code){
-            content.remove(enableUpload);
-            ProgressHandle ph = ProgressHandleFactory.createHandle("Posting Absentism Charge");
-                ph.start();
-            RequestProcessor.getDefault().post(new Runnable() {
-            @Override
-            public void run() {
-                
-                for(int i = 0; i<list.size(); i++){
-                    AttendanceSummary sum = list.get(i);
-                    Employees emp = DataAccess.getEmployeeByID(sum.getEmployeeID());
-                    BigDecimal amount = new BigDecimal(sum.getBasicPay()*sum.getAbsentDays()/sum.getDaysinPeriods()).round(MathContext.DECIMAL32);
-                    ph.progress(i+" / "+list.size()+ " "+emp.getSurName()+" "+emp.getOtherNames()+" -> "+amount);
-                    DataAccess.saveEmployeeTransaction(emp, code, amount, currency, TOOL_TIP_TEXT_KEY, period);
-                    
-                }
-                ph.finish();
-                
-            }
-        });
+        if(code==null){ //User Did not specify the code
+            StatusDisplayer.getDefault().setStatusText("To Proceed, A Code Must Be  Selected");
         }else{
-                StatusDisplayer.getDefault().setStatusText("Payroll Code was not selected");
+            Object result = DialogDisplayer.getDefault().notify(new NotifyDescriptor.Confirmation(code.getPayrollCodeName()+ " was selected.\n\nProceed ?", "Confirm The Code"));
+            if(result == NotifyDescriptor.YES_OPTION){
+                
+                //Check if there are transactions for the specified code in the current period
+                if( 1==1 ){ //If The transactions exist
+                    Object result2 = DialogDisplayer.getDefault().notify(new NotifyDescriptor.Confirmation("The Amount on the specified code will be updated to:\n\n Amount * Attended Days / Period Days\n\n Proceed ?", "Confirm"));
+                    if(result2 == NotifyDescriptor.YES_OPTION){
+                        
+                            content.remove(enableUpload);
+                            ProgressHandle ph = ProgressHandleFactory.createHandle("Updating Amounts on Code: "+ code.getPayrollCodeName());
+                            ph.start();
+                            RequestProcessor.getDefault().post(new Runnable() {
+                            @Override
+                            public void run() {
+                
+                                for(int i = 0; i<list.size(); i++){
+                                    AttendanceSummary sum = list.get(i);
+                                    Employees emp = DataAccess.getEmployeeByID(sum.getEmployeeID());
+                                    BigDecimal amount = new BigDecimal(sum.getBasicPay()*sum.getAbsentDays()/sum.getDaysinPeriods()).round(MathContext.DECIMAL32);
+                                    ph.progress(i+" / "+list.size()+ " "+emp.getSurName()+" "+emp.getOtherNames());
+                                    //DataAccess.saveEmployeeTransaction(emp, code, amount, currency, TOOL_TIP_TEXT_KEY, period);
+                                    DataAccess.updateEmployeeTransaction(emp, code, period, sum.getDaysinPeriods(), sum.getDaysinPeriods()-sum.getAbsentDays());
+                    
+                                }
+                            ph.finish();
+                
+                            }
+                            });
+                        
+                    }
+                    
+                }else{
+                    StatusDisplayer.getDefault().setStatusText("No Transactions where found For "+code.getPayrollCodeName());
+                    NotifyUtil.warn("No Transaction Found","No Transactions on Code: "+code.getPayrollCodeName() , false);
+                }
+                
             }
         }
+        
+        
+        
         
         
         
@@ -536,6 +557,14 @@ public final class AttendanceSummaryWithChargeTopComponent extends TopComponent 
             StatusDisplayer.getDefault().setStatusText(code.getPayrollCodeName());
         });
     }
+
+    @Override
+    public HelpCtx getHelpCtx() {
+        return new HelpCtx("");
+
+    }
+    
+    
     
     
     

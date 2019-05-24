@@ -93,7 +93,7 @@ public class ShiftSchedule extends PtmShiftSchedule{
 
     public String getsCode() {
         try{
-            return DataAccess.getShiftByID(bean.getShiftCode()).getShiftName();
+            return bean.getShiftCode().getShiftCode();
         }catch(NullPointerException ex){
             if(bean.getIsWeekOff()){
                 return "Weekly Off";

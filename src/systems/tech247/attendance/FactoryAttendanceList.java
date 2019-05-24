@@ -6,6 +6,7 @@
 package systems.tech247.attendance;
 
 import java.beans.IntrospectionException;
+import java.util.Date;
 import java.util.List;
 import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Node;
@@ -21,9 +22,12 @@ import systems.tech247.hr.VwPtmAttendanceWithComment;
 public class FactoryAttendanceList extends ChildFactory<VwPtmAttendanceWithComment>{
 
     QueryAttendance query;
-    
-    public FactoryAttendanceList(QueryAttendance query){
+    Date from;
+    Date to;
+    public FactoryAttendanceList(QueryAttendance query,Date from,Date to){
         this.query = query;
+        this.to = to;
+        this.from = from;
     }
     
     @Override

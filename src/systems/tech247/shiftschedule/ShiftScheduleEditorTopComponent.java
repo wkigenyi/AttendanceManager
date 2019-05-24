@@ -5,20 +5,11 @@
  */
 package systems.tech247.shiftschedule;
 
-import java.awt.Container;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.util.Date;
 
 import javax.persistence.EntityManager;
-import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.SpinnerDateModel;
-import javax.swing.SpinnerModel;
 
 
 
@@ -210,7 +201,7 @@ public final class ShiftScheduleEditorTopComponent extends TopComponent implemen
     }
     
     void fillShift(PtmShiftSchedule e){
-        jtShift.setText(DataAccess.getShiftByID(e.getShiftCode()).getShiftName());
+        jtShift.setText(e.getShiftCode().getShiftName());
         jdcShiftDate.setDate(e.getShiftDate());
         jcbComp.setSelected(e.getIsCOff());
         jcbWeekly.setSelected(e.getIsWeekOff());
@@ -274,7 +265,7 @@ public final class ShiftScheduleEditorTopComponent extends TopComponent implemen
                     .addGroup(layout.createSequentialGroup()
                         .addGap(76, 76, 76)
                         .addComponent(jcbWeekly)))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jdcShiftDate, jtShift});
@@ -342,7 +333,8 @@ public final class ShiftScheduleEditorTopComponent extends TopComponent implemen
     public void resultChanged(LookupEvent ev) {
         Lookup.Result<PtmShifts> rslt = (Lookup.Result<PtmShifts>)ev.getSource();
         for(PtmShifts p: rslt.allInstances()){
-            updatable.setShiftCode(p.getShiftID());
+            jtShift.setText(p.getShiftName());
+            updatable.setShiftCode(p);
             modify();
         }
             
