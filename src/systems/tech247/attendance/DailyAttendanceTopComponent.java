@@ -127,9 +127,9 @@ public final class DailyAttendanceTopComponent extends TopComponent implements E
         }
         
         if(quer){
-                    sqlString = "SELECT * FROM vwPtmAttendanceWithComment WHERE shiftdate >= ? AND ShiftDate <=? ORDER BY ShiftDate DESC";
+                    sqlString = "SELECT * FROM vwPtmAttendanceWithComment WHERE shiftdate >= ? AND ShiftDate AND EmployeeID IN (SELECT EmployeeID FROM Employees WHERE IsDisengaged=0) <=? ORDER BY ShiftDate DESC";
                 }else{
-                    sqlString = "SELECT * FROM vwPtmAttendanceWithComment WHERE shiftdate >= ? AND ShiftDate <=? AND Comment LIKE '%ABSENT%' ORDER BY EmployeeID,ShiftDate DESC";
+                    sqlString = "SELECT * FROM vwPtmAttendanceWithComment WHERE shiftdate >= ? AND ShiftDate <=? AND Comment LIKE '%ABSENT%' AND EmployeeID IN (SELECT EmployeeID FROM Employees WHERE IsDisengaged=0) ORDER BY EmployeeID,ShiftDate DESC";
                 }
         
         
@@ -717,9 +717,9 @@ public final class DailyAttendanceTopComponent extends TopComponent implements E
             }else if(o instanceof JobPositions){
                 JobPositions j = (JobPositions)o;
                 if(quer){
-                    sqlString = "SELECT * FROM vwPtmAttendanceWithComment where PositionID = "+j.getPositionID()+" AND shiftdate >= ? AND ShiftDate <=? ORDER BY ShiftDate DESC";
+                    sqlString = "SELECT * FROM vwPtmAttendanceWithComment where PositionID = "+j.getPositionID()+" AND shiftdate >= ? AND ShiftDate <=? AND EmployeeID IN (SELECT EmployeeID FROM Employees WHERE IsDisengaged=0) ORDER BY ShiftDate DESC";
                 }else{
-                    sqlString = "SELECT * FROM vwPtmAttendanceWithComment where PositionID = "+j.getPositionID()+" AND shiftdate >= ? AND ShiftDate <=? AND Comment LIKE '%ABSENT%' ORDER BY EmployeeID,ShiftDate DESC";
+                    sqlString = "SELECT * FROM vwPtmAttendanceWithComment where PositionID = "+j.getPositionID()+" AND shiftdate >= ? AND ShiftDate <=? AND Comment LIKE '%ABSENT%' AND EmployeeID IN (SELECT EmployeeID FROM Employees WHERE IsDisengaged=0) ORDER BY EmployeeID,ShiftDate DESC";
                 }
                 //query = new QueryAttendance(sqlString);
                 clearFilters();
@@ -730,9 +730,9 @@ public final class DailyAttendanceTopComponent extends TopComponent implements E
             }else if(o instanceof EmployeeCategories){
                 EmployeeCategories cat = (EmployeeCategories)o;
                 if(quer){
-                    sqlString = "SELECT * FROM vwPtmAttendanceWithComment where CategoryID = "+cat.getCategoryID()+" AND shiftdate >= ? AND ShiftDate <=? ORDER BY ShiftDate DESC";
+                    sqlString = "SELECT * FROM vwPtmAttendanceWithComment where CategoryID = "+cat.getCategoryID()+" AND shiftdate >= ? AND ShiftDate <=? AND EmployeeID IN (SELECT EmployeeID FROM Employees WHERE IsDisengaged=0) ORDER BY ShiftDate DESC";
                 }else{
-                    sqlString = "SELECT * FROM vwPtmAttendanceWithComment where CategoryID = "+cat.getCategoryID()+" AND shiftdate >= ? AND ShiftDate <=? AND Comment LIKE '%ABSENT%' ORDER BY EmployeeID,ShiftDate DESC";
+                    sqlString = "SELECT * FROM vwPtmAttendanceWithComment where CategoryID = "+cat.getCategoryID()+" AND shiftdate >= ? AND ShiftDate <=? AND Comment LIKE '%ABSENT%' AND EmployeeID IN (SELECT EmployeeID FROM Employees WHERE IsDisengaged=0) ORDER BY EmployeeID,ShiftDate DESC";
                 }
                 //query = new QueryAttendance(sqlString);
                 clearFilters();
@@ -741,9 +741,9 @@ public final class DailyAttendanceTopComponent extends TopComponent implements E
             }else if(o instanceof OrganizationUnits){
                 unit = (OrganizationUnits)o;
                 if(quer){
-                    sqlString = "SELECT * FROM vwPtmAttendanceWithComment where deptID = "+unit.getOrganizationUnitID()+" AND shiftdate >= ? AND ShiftDate <=? ORDER BY ShiftDate DESC";
+                    sqlString = "SELECT * FROM vwPtmAttendanceWithComment where deptID = "+unit.getOrganizationUnitID()+" AND shiftdate >= ? AND ShiftDate <=? AND EmployeeID IN (SELECT EmployeeID FROM Employees WHERE IsDisengaged=0) ORDER BY ShiftDate DESC";
                 }else{
-                    sqlString = "SELECT * FROM vwPtmAttendanceWithComment where deptID = "+unit.getOrganizationUnitID()+" AND shiftdate >= ? AND ShiftDate <=? AND Comment LIKE '%ABSENT%' ORDER BY EmployeeID,ShiftDate DESC";
+                    sqlString = "SELECT * FROM vwPtmAttendanceWithComment where deptID = "+unit.getOrganizationUnitID()+" AND shiftdate >= ? AND ShiftDate <=? AND Comment LIKE '%ABSENT%' AND EmployeeID IN (SELECT EmployeeID FROM Employees WHERE IsDisengaged=0) ORDER BY EmployeeID,ShiftDate DESC";
                 }
                 //query = new QueryAttendance(sqlString);
                 clearFilters();
