@@ -499,6 +499,11 @@ public final class DailyAttendanceTopComponent extends TopComponent implements E
         org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(DailyAttendanceTopComponent.class, "DailyAttendanceTopComponent.jLabel10.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(DailyAttendanceTopComponent.class, "DailyAttendanceTopComponent.jButton1.text")); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -590,6 +595,16 @@ public final class DailyAttendanceTopComponent extends TopComponent implements E
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+        clearFilters();
+        if(quer){
+                    sqlString = "SELECT * FROM vwPtmAttendanceWithComment WHERE shiftdate >= ? AND ShiftDate AND EmployeeID IN (SELECT EmployeeID FROM Employees WHERE IsDisengaged=0) <=? ORDER BY ShiftDate DESC";
+                }else{
+                    sqlString = "SELECT * FROM vwPtmAttendanceWithComment WHERE shiftdate >= ? AND ShiftDate <=? AND Comment LIKE '%ABSENT%' AND EmployeeID IN (SELECT EmployeeID FROM Employees WHERE IsDisengaged=0) ORDER BY EmployeeID,ShiftDate DESC";
+                }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

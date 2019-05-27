@@ -5,15 +5,11 @@
  */
 package systems.tech247.clockinutil;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import javax.persistence.Query;
-import javax.swing.JButton;
 import net.sf.dynamicreports.report.datasource.DRDataSource;
 import net.sf.jasperreports.engine.JRDataSource;
 import org.netbeans.api.progress.ProgressHandle;
@@ -32,7 +28,6 @@ import systems.tech247.clockin.ZKOptions;
 import systems.tech247.clockin.ZKSoapLib;
 import systems.tech247.dbaccess.AttendanceSummary;
 import systems.tech247.dbaccess.DataAccess;
-import static systems.tech247.dbaccess.DataAccess.entityManager;
 import systems.tech247.hr.Employees;
 import systems.tech247.hr.OrganizationUnits;
 import systems.tech247.hr.TblPeriods;
